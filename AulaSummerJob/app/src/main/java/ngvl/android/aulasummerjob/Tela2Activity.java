@@ -87,7 +87,7 @@ public class Tela2Activity extends AppCompatActivity
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
 
         Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_myposition);
         mMarkerAtual = mMap.addMarker(
                 new MarkerOptions().title("Local atual").icon(icon).position(
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
