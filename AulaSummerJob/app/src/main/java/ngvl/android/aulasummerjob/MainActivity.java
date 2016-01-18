@@ -3,7 +3,6 @@ package ngvl.android.aulasummerjob;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,11 +15,11 @@ import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
@@ -43,6 +42,7 @@ public class MainActivity extends AppCompatActivity{
 
         final EditText edtNome = (EditText)findViewById(R.id.edtNome);
         final EditText edtNome2 = (EditText)findViewById(R.id.editText);
+
         loginButton = (LoginButton)findViewById(R.id.login_button);
 
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
@@ -63,20 +63,24 @@ public class MainActivity extends AppCompatActivity{
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                info.setText("User Name: " + "\n" + "Auth Token: ");
-                GraphRequest request = GraphRequest.newMeRequest(
-                        loginResult.getAccessToken(),
-                        new GraphRequest.GraphJSONObjectCallback() {
+                // App code
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(),new GraphRequest.GraphJSONObjectCallback() {
                             @Override
-                            public void onCompleted(
-                                    JSONObject object,
-                                    GraphResponse response) {
+                            public void onCompleted(JSONObject object,GraphResponse response) {
                                 // Application code
-                                Log.v("LoginActivity", response.toString());
+                                //Log.v("LoginActivity", response.toString());
+                                //String stringdolog = response.toString();
+                                //info.setText("Login " + stringdolog);
+                                try {
+                                    info.setText("Login " + object.getString("name"));
+                                    String user_name = object.getString("name");
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        });
+                });
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender, birthday");
+                parameters.putString("field","name");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
