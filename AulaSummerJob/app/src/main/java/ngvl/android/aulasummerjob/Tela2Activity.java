@@ -48,11 +48,14 @@ public class Tela2Activity extends AppCompatActivity
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(Tela2Activity.this,
-                        "Mensagem! " + edtNome.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
+                Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+                double lat = lastKnownLocation.getLatitude();
+                double lng = lastKnownLocation.getLongitude();
+                //Enviar Lat e Lng para o servidor, antes de ir para a nova tela.
 
-                Intent it = new Intent(Tela2Activity.this, Main2Activity.class);
+                Toast.makeText(Tela2Activity.this,"Solicitação enviada para Lat: "+ lat +" Lng: "+lng+ edtNome.getText().toString(),Toast.LENGTH_LONG).show();
+                Intent it = new Intent(Tela2Activity.this, EnviarChamado.class);
+
                 startActivity(it);
             }
         });
@@ -93,8 +96,7 @@ public class Tela2Activity extends AppCompatActivity
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
         );
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
@@ -115,8 +117,7 @@ public class Tela2Activity extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         TextView txt = (TextView)findViewById(R.id.textView);
-        txt.setText("LAT:"+ location.getLatitude() +
-                "LONG:"+ location.getLongitude());
+        txt.setText("LAT:"+ location.getLatitude() + "LONG:"+ location.getLongitude());
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));

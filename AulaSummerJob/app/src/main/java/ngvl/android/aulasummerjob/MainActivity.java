@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity{
                                 //info.setText("Login " + stringdolog);
                                 try {
                                     info.setText("Login " + object.getString("name"));
-                                    String user_name = object.getString("name");
+                                    String user_name = object.getString("name");        //Obtendo o nome do usuario do facebook. Enviar para o servidor!
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
