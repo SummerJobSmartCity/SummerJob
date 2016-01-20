@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Teste1</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_coletor">COLETOR</string>
+    <string name="lbl_doador">DOADOR</string>
+    <string name="lbl_ou">ou</string>
+    <string name="lbl_Face">Cadastro com Facebook</string>
+    <string name="lbl_pedir">Solicitar carroceiro</string>
+    <string name="ldl_confirme">Confirme a localização da coleta</string>
+    <string name="lbl_busc.carroca">Buscando carroceiro</string>
+    <string name="lbl_busPedido">Buscando pedido</string>
+    <string name="btnOk">Ok</string>
+    <string name="btnRecusar">Recusar</string>
+    <string name="btnAceitar">Aceitar</string>
+    <string name="txt_d.doador">Dados do doador</string>
+    <string name="btnColetaEfetudada">Coletar efetuada</string>
+    <string name="txtAcaminho">Estou a caminho!</string>
+    <string name="txt_d.coletor">Dados do coletor</string>
+</resources>
