@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v23/abc_control_background_material.xml",
+        "source": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v23/abc_control_background_material.xml"
+    },
+    {
+        "merged": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v23/abc_control_background_material.xml",
+        "source": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v23/abc_control_background_material.xml"
+    }
+]

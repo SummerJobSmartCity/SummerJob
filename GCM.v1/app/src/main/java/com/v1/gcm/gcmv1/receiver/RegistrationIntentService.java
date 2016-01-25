@@ -30,11 +30,13 @@ public class RegistrationIntentService extends IntentService {
         SharedPreferences preferences;
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         boolean status = preferences.getBoolean("status", false);
-
+        System.out.println(status);
         synchronized (LOG) {
             InstanceID instanceID = InstanceID.getInstance(this);
             try{
                 if (!status) {//ocorre quando há um cadastro, como se a pessoa estivesse acessando pela primeira vez na app
+                    System.out.println("entrou");
+
                     String token = instanceID.getToken("312239874000",
                             GoogleCloudMessaging.INSTANCE_ID_SCOPE,
                             null);

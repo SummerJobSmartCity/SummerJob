@@ -1,0 +1,18 @@
+[
+    {
+        "merged": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    },
+    {
+        "merged": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/home/cesar/Git/SummerJobSmartCity/SummerJob/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v21/abc_btn_colored_material.xml",
+        "source": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v21/abc_btn_colored_material.xml"
+    },
+    {
+        "merged": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/res/merged/debug/drawable-v21/abc_action_bar_item_background_material.xml",
+        "source": "/home/cesar/AndroidStudioProjects/NRD.v3/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable-v21/abc_action_bar_item_background_material.xml"
+    }
+]
