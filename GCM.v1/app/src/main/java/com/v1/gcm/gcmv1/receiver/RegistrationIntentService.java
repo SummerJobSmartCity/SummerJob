@@ -42,10 +42,11 @@ public class RegistrationIntentService extends IntentService {
                             null);
                     Log.i(LOG, "TOKEN:" + token);
 
-//                    preferences.edit().putBoolean("status", token !=null && token.trim().length()>0).apply();
-//                    sendRegistrationId(token );//enviar para servidor
-                }
+                    preferences.edit().putString("token",
+                             token != null && token.trim().length() > 0 ? token : "").apply();
+                   // sendRegistrationId(token );//enviar para servidor
 
+                }
             }catch (IOException e) {
                 e.printStackTrace();
             }
@@ -53,11 +54,13 @@ public class RegistrationIntentService extends IntentService {
     }
 
     private void sendRegistrationId(String token){
-        User user = new User();
-        user.setRegistrationId( token );
+//        User user = new User();
+//        user.setRegistrationId( token );
+//
+//        NetworkConnection
+//                .getInstance(this)
+//                .execute(new WrapObjToNetwork(user,"save-user"), RegistrationIntentService.class.getName());
 
-        NetworkConnection
-                .getInstance(this)
-                .execute(new WrapObjToNetwork(user,"save-user"), RegistrationIntentService.class.getName());
+
     }
 }

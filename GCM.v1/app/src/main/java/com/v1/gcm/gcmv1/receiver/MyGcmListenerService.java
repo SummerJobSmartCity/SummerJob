@@ -1,6 +1,7 @@
 package com.v1.gcm.gcmv1.receiver;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 import com.v1.gcm.gcmv1.domain.PushMessage;
@@ -17,6 +18,10 @@ public class MyGcmListenerService extends GcmListenerService{
         //super.onMessageReceived(from,data);
         String title = data.getString("title");
         String message = data.getString("message");
+
+        Log.i(TAG, title);
+        Log.i(TAG, message);
+
 
         EventBus.getDefault().post(new PushMessage(title,message));
     }
