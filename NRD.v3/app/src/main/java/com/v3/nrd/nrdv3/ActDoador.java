@@ -11,9 +11,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,7 +38,8 @@ public class ActDoador extends AppCompatActivity
         LocationListener {
 
     private Button btnSolicitar;
-
+    public double lat;
+    public double lng;
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
@@ -101,11 +99,17 @@ public class ActDoador extends AppCompatActivity
             return;
         }
         Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
+        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_position_blue);
         mMarkerAtual = mMap.addMarker(
                 new MarkerOptions().title("Local atual").icon(icon).position(
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
         );
+
+        lat = lastKnownLocation.getLatitude();
+        lng = lastKnownLocation.getLongitude();
+        System.out.println("HELLO 2 LATI :      " + lat);
+        System.out.println("HELLO 2 LATI :      " + lng);
+//      Enviar para o servidor LAT e LNG do doador
 
         LocationServices.FusedLocationApi.requestLocationUpdates(
                 mGoogleApiClient, mLocationRequest, this);
@@ -136,5 +140,4 @@ public class ActDoador extends AppCompatActivity
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
         mMarkerAtual.setPosition(latLng);
     }
-
 }

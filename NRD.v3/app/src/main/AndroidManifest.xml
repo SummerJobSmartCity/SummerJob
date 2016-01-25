@@ -28,10 +28,19 @@
         -->
 
         <activity android:name=".ActColetor" />
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCojoN0st2dSTKCxeOtD6khZ4zCI3ssZDA" />
+            android:value="AIzaSyCSeioyF-NUGjL1EtjO3nk74ZE12HIid88" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
         <activity android:name=".BuscarColetor" />
         <activity android:name=".ActPedido" />

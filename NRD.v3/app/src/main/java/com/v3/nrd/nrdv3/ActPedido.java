@@ -38,6 +38,10 @@ public class ActPedido extends AppCompatActivity
     private Button btnAceitar;
     private Button btnRecusar1;
 
+//  receber lat e lng do doador informado pelo servidor
+    public double lat_doador;
+    public double lng_doador;
+
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
