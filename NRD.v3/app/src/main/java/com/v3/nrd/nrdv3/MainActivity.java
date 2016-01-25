@@ -4,15 +4,25 @@ package com.v3.nrd.nrdv3;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import android.content.*; //para chamar outra activity
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.v3.nrd.nrdv3.GCM.RegistrationIntentService;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String SERVER_API_KEY = "AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA";
+    private static final String SENDER_ID = "1023915214454";
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+
 
     //criar os objetos
     private Button btnColetor;
@@ -34,9 +44,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnColetor.setOnClickListener(this);
         btnDoador.setOnClickListener(this);
 
+        if (checkPlayServices()) {//se possui Google Play Service
+            //chamar o registrationId
+            Intent it = new Intent(this, RegistrationIntentService.class);
+            System.out.println("intent");
+            startService(it);
+        }
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    private boolean checkPlayServices() {
+        int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (GooglePlayServicesUtil.isUserRecoverableError(resultCode)) {
+                GooglePlayServicesUtil.getErrorDialog(resultCode, this,
+                        PLAY_SERVICES_RESOLUTION_REQUEST).show();
+            } else {
+                Log.i("LOG", "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
     }
 
     @Override
