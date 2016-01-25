@@ -1,0 +1,89 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.v1.gcm.gcmv1">
+
+    <!--[Server API Key = AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw]-->
+    <!--[Sender ID = 312239874000]-->
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- PAra a gente poder enviar o nosso registration ID. Cada device vai ter uma registration ID
+    unico  referente a esse APP no device utilizado para enviar mensagem lá do servidor para os devices-->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- necessário pq abaixo do android 3.0, para utilizar o gcm,
+     é preciso uma conta conectada-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <!-- The [android.permission.WAKE_LOCK] permission so the application can keep the processor
+    from sleeping when a message is received.
+    OPICIONAL. permite que a app continue trabalhando,que o device continue trabalhando,
+    quando chegar uma mensagem do nosso servidor de push message.
+    recomendado não utilizá-lo, se vc não tiver uma restrição, uma lógica de negócio na sua app.
+    pq se vc mantem ele AWAKE, trabalhando,vc estará consumindo bateria, um grande problema-->
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- Your <application-package-name> + ".permission.C2D_MESSAGE" permission to prevent other
+    Android applications from registering and receiving the Android application's messages.
+    The permission name must exactly match
+     this pattern—otherwiYour <application-package-name> + ".permission.C2D_MESSAGE" permission to
+     prevent other Android applications from registering and receiving the Android application's messages.
+     The permission name must exactly match this pattern—otherwise the Android application will not receive
+     the messages.he Android application will not receive the messages.
+     permite que a aplicação receba as mensagens-->
+    <permission android:name="com.v1.gcm.gcmv1.permission.C2D_MESSAGE"
+        android:protectionLevel="signature" />
+    <!--permite que somente nossa aplicação capture mensagens do nosso sender, ou seja,
+    das mensagens direcionadas para a nossa aplicação para que as outras aplicações não consigam
+    acessar essas mensagens -->
+
+    <uses-permission android:name="com.v1.gcm.gcmv1.permission.C2D_MESSAGE" />
+    <!-- VERIFICAR O <your-package-name> -->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.v1.gcm.gcmv1" />
+            </intent-filter>
+            <!--A declaration of GcmReceiver, which handles messages sent from GCM
+            to your application. Because this service needs permission to receive messages
+            from GCM, add com.google.android.c2dm.permission.SEND to the receiver.
+            herda de ...., que permite a gente deixar a app trabalhando, que é referende
+             a WAKE LOCK, mas mesmo assim é preciso a permissão do WAKE LOCK para o
+             Receiver continua trabalhando -->
+        </receiver>
+
+        <service
+            android:name="com.v1.gcm.gcmv1.receiver.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+            <!--A declaration of GcmListenerService, which enables various aspects of handling
+            messages such as detecting different downstream message types, determining upstream send status,
+             and automatically displaying simple notifications on the app’s behalf.-->
+        </service>
+
+        <service
+            android:name="com.v1.gcm.gcmv1.receiver.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+            <!--A service that extends InstanceIDListenerService, to handle the creation,
+            rotation, and updating of registration tokens.-->
+        </service>
+        <service
+            android:name="com.v1.gcm.gcmv1.receiver.RegistrationIntentService"
+            android:exported="false" >
+            <!--processar as mensagens que serão recebidas.-->
+        </service>
+    </application>
+
+
+</manifest>
