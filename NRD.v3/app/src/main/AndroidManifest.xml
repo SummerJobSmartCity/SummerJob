@@ -13,28 +13,28 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity" />
-        <activity android:name=".ActLogin">
+        <activity android:name=".Layout.MainActivity" />
+        <activity android:name=".Layout.ActLogin">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ActDoador" />
+        <activity android:name=".Layout.ActDoador" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
         -->
 
-        <activity android:name=".ActColetor" />
+        <activity android:name=".Layout.ActColetor" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCojoN0st2dSTKCxeOtD6khZ4zCI3ssZDA" />
 
-        <activity android:name=".BuscarColetor" />
-        <activity android:name=".ActPedido" />
+        <activity android:name=".Layout.BuscarColetor" />
+        <activity android:name=".Layout.ActPedido" />
         <!--
              ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -43,10 +43,10 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name=".ActAceitar" />
-        <activity android:name=".ActResultado" />
-        <activity android:name=".AvaliarColetor" />
-        <activity android:name=".AvaliarDoador"></activity>
+        <activity android:name=".Layout.ActAceitar" />
+        <activity android:name=".Layout.ActResultado" />
+        <activity android:name=".Layout.AvaliarColetor" />
+        <activity android:name=".Layout.AvaliarDoador"></activity>
     </application>
 
 </manifest>
