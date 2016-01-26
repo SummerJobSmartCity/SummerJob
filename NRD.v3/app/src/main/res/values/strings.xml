@@ -16,4 +16,6 @@
     <string name="btnColetaEfetudada">Coletar efetuada</string>
     <string name="txtAcaminho">Estou a caminho!</string>
     <string name="txt_d.coletor">Dados do coletor</string>
+    <string name="tv_title"></string>
+    <string name="tv_message"></string>
 </resources>

@@ -16,4 +16,19 @@
         android:id="@+id/btnLogin"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_title"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_marginTop="20dp"
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_message" />
 </RelativeLayout>
