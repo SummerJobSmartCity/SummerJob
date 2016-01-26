@@ -15,6 +15,9 @@ public class MyGcmListenerService extends GcmListenerService {
         //super.onMessageReceived(from,data);
         String title = data.getString("title");
         String message = data.getString("message");
+//
+//        String nomedoador=data.getString("nomedoador");
+//        String telefonedoador=data.getString("telefonedoador");
 
         Log.i(TAG, title);
         Log.i(TAG, message);
