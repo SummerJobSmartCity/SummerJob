@@ -4,11 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
@@ -41,6 +41,8 @@ public class ActPedido extends AppCompatActivity
 //  receber lat e lng do doador informado pelo servidor
     public double lat_doador;
     public double lng_doador;
+    public String origem;
+    public String destino;
 
 
     GoogleApiClient mGoogleApiClient;
@@ -49,6 +51,7 @@ public class ActPedido extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        System.out.println("ENTROU ONCREATE:       ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_pedido);
 
@@ -81,22 +84,27 @@ public class ActPedido extends AppCompatActivity
                 getSupportFragmentManager().findFragmentById(R.id.map2);
         mMap = mapFragment.getMap();
 
-
+        //origem = "-8.0599384,-34.8726423";
+        destino = "-8.049414,-34.881700";
     }
 
     @Override
     protected void onResume() {
+        System.out.println("ENTROU ONRESUME:       ");
         super.onResume();
         mGoogleApiClient.connect();
     }
 
     @Override
     protected void onPause() {
+        System.out.println("ENTROU ONPAUSE:       ");
         super.onPause();
         mGoogleApiClient.disconnect();
     }
 
     protected void createLocationRequest() {
+        System.out.println("ENTROU CREATELOCATIONREQUEST:       ");
+
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(500);
@@ -113,18 +121,24 @@ public class ActPedido extends AppCompatActivity
             return;
         }
         Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
+        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
         mMarkerAtual = mMap.addMarker(
                 new MarkerOptions().title("Local atual").icon(icon).position(
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
         );
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+
+        origem = String.valueOf(lastKnownLocation.getLatitude()) + "," + String.valueOf(lastKnownLocation.getLongitude());
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+
+        System.out.println("VAI CHAMAR ITINERAIRETASK:       ");
+        new ItineraireTask(this, mMap, origem, destino).execute();
     }
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
+        System.out.println("ENTROU ONCONNECTED:       ");
         createLocationRequest();
     }
 
@@ -143,9 +157,10 @@ public class ActPedido extends AppCompatActivity
         //TextView txt = (TextView)findViewById(R.id.textView);
         //txt.setText("LAT:"+ location.getLatitude() +
         //       "LONG:"+ location.getLongitude());
+        System.out.println("ENTROU ONLOCATIONCHANGED:       ");
 
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         mMarkerAtual.setPosition(latLng);
     }
 
