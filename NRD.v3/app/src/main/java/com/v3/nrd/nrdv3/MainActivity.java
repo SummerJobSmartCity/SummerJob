@@ -1,16 +1,28 @@
 package com.v3.nrd.nrdv3;
 
 
+import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.*;
-import android.widget.*;
-import android.content.*; //para chamar outra activity
+import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -22,11 +34,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    String fbJsonObjToString;
+    JSONObject jsonObj;
+    private RequestQueue requestQueue;
+
+
+
+//    protected JSONObject fbJsonObj = new JSONObject(fbJsonObjToString);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
+
+        fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+        requestQueue = Volley.newRequestQueue(this);
+
+
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         btnColetor = (Button) findViewById(R.id.btnColetor);
         btnDoador = (Button) findViewById(R.id.btnDoador);
@@ -67,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onStart() {
         super.onStart();
+
+        System.out.println("AQUIIIII       :        " + fbJsonObjToString);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -111,7 +143,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnColetor:
                 Intent it = new Intent(this, ActColetor.class);
                 //2 parametros(a classe que está chamando,a classe que quero chamar)
+//              enviar para o servidor id Coletor
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users",
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(MainActivity.this, "Deu certo no MainActivity", Toast.LENGTH_LONG).show();
+                            }
+                        },
 
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonObjectRequest);
                 startActivity(it);
                 break;
             case R.id.btnDoador:
