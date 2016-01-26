@@ -47,6 +47,7 @@ public class RegistrationIntentService extends IntentService {
             }catch (IOException e) {
                 e.printStackTrace();
             }
+            System.out.println("saiu");
         }
     }
 

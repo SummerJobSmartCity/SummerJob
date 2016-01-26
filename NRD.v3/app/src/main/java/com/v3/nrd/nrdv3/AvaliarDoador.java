@@ -5,8 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RatingBar;
 
 public class AvaliarDoador extends AppCompatActivity {
+
+    private RatingBar rating_Bar;
+    String avaliarDoador;
+
 
     private Button btnOk1;
 
@@ -15,6 +20,7 @@ public class AvaliarDoador extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.avaliar_doador);
 
+        listenerForRatingBar();
         btnOk1=(Button)findViewById(R.id.btnOk1);
         btnOk1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -23,5 +29,18 @@ public class AvaliarDoador extends AppCompatActivity {
                 startActivity(it);
             }
         });
+
+
+    }
+    public void listenerForRatingBar(){
+        rating_Bar=(RatingBar)findViewById(R.id.ratingBar);
+        rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                                    @Override
+                                                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                                        avaliarDoador= String.valueOf(rating_Bar.getRating());
+                                                    }
+                                                }
+        );
+
     }
 }

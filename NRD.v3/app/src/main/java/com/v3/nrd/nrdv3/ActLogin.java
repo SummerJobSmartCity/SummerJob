@@ -18,7 +18,7 @@ import com.v3.nrd.nrdv3.GCM.RegistrationIntentService;
 
 public class ActLogin extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String SERVER_API_KEY = "AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA";
+    private static final String SERVER_API_KEY = "AIzaSyBOL9JDjuKHKvw6QHZ16lo5XXk9ffmfcUo";
     private static final String SENDER_ID = "1023915214454";
 
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -87,8 +87,6 @@ public class ActLogin extends AppCompatActivity implements View.OnClickListener 
         //2 parametros(a classe que está chamando,a classe que quero chamar)
 
         startActivity(it);
-
-
     }
 
 

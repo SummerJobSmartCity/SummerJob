@@ -11,38 +11,79 @@
     android:id="@+id/imFotododoador">
 
     <TextView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textAppearance="?android:attr/textAppearanceMedium"
-    android:text="@string/txt_d.doador"
-    android:id="@+id/textView5"
-    android:layout_alignParentTop="true"
-    android:layout_alignParentLeft="true"
-    android:layout_alignParentStart="true"
-    android:layout_marginTop="131dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/txt_d.doador"
+        android:id="@+id/textView1"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:id="@+id/imageView"
-    android:src="@mipmap/ic_launcher"
-    android:layout_alignParentRight="true"
-    android:layout_alignParentEnd="true"
-    android:layout_above="@+id/map2"
-    android:layout_alignParentTop="true"
-    android:layout_toRightOf="@+id/textView5"
-    android:layout_toEndOf="@+id/textView5"
-    android:layout_alignParentStart="false" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:src="@mipmap/ic_launcher"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/map2"
+        android:layout_alignEnd="@+id/map2"
+        android:layout_above="@+id/map2"
+        android:layout_toEndOf="@+id/telefone_doador"
+        android:layout_toRightOf="@+id/telefone_doador" />
+
+
 
     <fragment
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:id="@+id/map2"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_below="@+id/textView5"
-    android:layout_alignParentEnd="false"
-    android:layout_alignParentStart="false"
-    android:layout_alignParentBottom="true" />
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:id="@+id/map2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/txttelefone" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/lbl_nome"
+        android:id="@+id/txtnome"
+        android:layout_below="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/txt_nomedoador"
+        android:id="@+id/nome_doador"
+        android:layout_below="@+id/textView1"
+        android:layout_toRightOf="@+id/txtnome"
+        android:layout_toEndOf="@+id/txtnome" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/lbl_telefone"
+        android:id="@+id/txttelefone"
+        android:layout_below="@+id/txtnome"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/txt_telefonedodoador"
+        android:id="@+id/telefone_doador"
+        android:layout_below="@+id/nome_doador"
+        android:layout_toRightOf="@+id/txttelefone"
+        android:layout_toEndOf="@+id/txttelefone" />
+
 
     <Button
         android:layout_width="wrap_content"
@@ -51,4 +92,5 @@
         android:id="@+id/btnColetaEfetuada"
         android:layout_alignBottom="@+id/map2"
         android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
