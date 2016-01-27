@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RatingBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -12,10 +13,12 @@ import org.json.JSONObject;
 public class AvaliarDoador extends AppCompatActivity {
 
     private Button btnOk1;
+    private RatingBar rating_Bar;
     String fbJsonObjToString;
     JSONObject jsonObj;
-
     String id;
+    String avaliarDoador;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,5 +43,16 @@ public class AvaliarDoador extends AppCompatActivity {
                 startActivity(it);
             }
         });
+    }
+
+    public void listenerForRatingBar(){
+        rating_Bar=(RatingBar)findViewById(R.id.ratingBar);
+        rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                                    @Override
+                                                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                                        avaliarDoador = String.valueOf(rating_Bar.getRating());
+                                                    }
+                                                }
+        );
     }
 }

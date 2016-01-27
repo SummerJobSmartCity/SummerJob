@@ -72,9 +72,6 @@ public class ActDoador extends AppCompatActivity
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         System.out.println("CHECAR SE TA COM O TIPO =================== >    " + fbJsonObjToString);
 
-
-
-
         btnSolicitar = (Button) findViewById(R.id.btnSolicitar);
         btnSolicitar.setOnClickListener(new View.OnClickListener() {
             @Override

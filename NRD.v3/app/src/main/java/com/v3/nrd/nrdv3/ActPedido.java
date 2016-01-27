@@ -208,7 +208,7 @@ public class ActPedido extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView txt = (TextView)findViewById(R.id.textView5);
+        TextView txt = (TextView)findViewById(R.id.textView1);
         try {
             txt.setText("Nome do Json: " + jsonObj.getString("name"));
         } catch (JSONException e) {

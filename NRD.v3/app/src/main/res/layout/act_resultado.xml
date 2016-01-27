@@ -57,4 +57,23 @@
         android:id="@+id/textView7"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/txt_nomecoletor"
+        android:id="@+id/nome_coletor"
+        android:layout_below="@+id/textView7"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/txt_telefonedocoletor"
+        android:id="@+id/telefone_coletor"
+        android:layout_below="@+id/nome_coletor"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>

@@ -1,8 +1,10 @@
 package com.v3.nrd.nrdv3;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RequestQueue requestQueue;
     String id;
     String tipo;
+    ProgressDialog mProgressDialog;
+
 
 
 
@@ -144,6 +148,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.btnColetor:
                 Intent it = new Intent(this, ActColetor.class);
+
+//                mProgressDialog.setTitle(getString(R.string.lbl_loading));
+//                mProgressDialog.setCancelable(false);
+//                mProgressDialog.show();
+
+//                ProcessData p = new ProcessData();
+//                p.execute();
+
                 //2 parametros(a classe que está chamando,a classe que quero chamar)
 //              enviar para o servidor id Coletor
                 tipo = "coletor";
@@ -173,11 +185,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 );
                 requestQueue.add(jsonObjectRequest);
-                it.putExtra("fbJsonObj",jsonObj.toString());
+                it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
                 break;
             case R.id.btnDoador:
                 Intent it2 = new Intent(this, ActDoador.class);
+
+//                mProgressDialog.setTitle(getString(R.string.lbl_loading));
+//                mProgressDialog.setCancelable(false);
+//                mProgressDialog.show();
+
                 //2 parametros(a classe que está chamando,a classe que quero chamar)
 //              enviar para o servidor id do doador
                 tipo = "doador";
@@ -210,6 +227,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 it2.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it2);
                 break;
+        }
+    }
+
+    public class ProcessData extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            //2 parametros(a classe que está chamando,a classe que quero chamar)
+//              enviar para o servidor id Coletor
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                    "http://172.28.144.181:5000/api/users",
+                    jsonObj,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(MainActivity.this, "Deu certo no MainActivity", Toast.LENGTH_LONG).show();
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }
+            );
+            requestQueue.add(jsonObjectRequest);
+            return null;
         }
     }
 }
