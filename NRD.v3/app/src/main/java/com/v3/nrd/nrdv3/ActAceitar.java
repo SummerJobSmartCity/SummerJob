@@ -26,6 +26,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ActAceitar extends AppCompatActivity
     implements
     GoogleApiClient.ConnectionCallbacks,
@@ -38,41 +41,61 @@ public class ActAceitar extends AppCompatActivity
         GoogleApiClient mGoogleApiClient;
         GoogleMap mMap;
         Marker mMarkerAtual;
+        String fbJsonObjToString;
+        String destino;
+        JSONObject jsonObj;
+        String origem;
 
         @Override
         protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_aceitar);
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.act_aceitar);
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+            fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+            System.out.println("STRING NO BUSCA COLETOR ======================>   " + fbJsonObjToString);
 
-        SupportMapFragment mapFragment = (SupportMapFragment)
-                getSupportFragmentManager().findFragmentById(R.id.map2);
-        mMap = mapFragment.getMap();
+            destino = getIntent().getStringExtra("latlng_doador");
+            System.out.println("DESTINO DO COLETOR ======================>   " + destino);
 
-        btnColetaEfetuada= (Button) findViewById(R.id.btnColetaEfetuada);
-        btnColetaEfetuada.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent it = new Intent(ActAceitar.this, AvaliarDoador.class);
-                startActivity(it);
+            try {
+                jsonObj = new JSONObject(fbJsonObjToString);
+                origem = jsonObj.getString("latitude"+"longitude");
+                System.out.println("ORIGEM DO COLETOR ======================>   " + origem);
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
 
-    }
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
 
-        @Override
-        protected void onResume() {
+            SupportMapFragment mapFragment = (SupportMapFragment)
+                    getSupportFragmentManager().findFragmentById(R.id.map2);
+            mMap = mapFragment.getMap();
+
+            btnColetaEfetuada= (Button) findViewById(R.id.btnColetaEfetuada);
+            btnColetaEfetuada.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent it = new Intent(ActAceitar.this, AvaliarDoador.class);
+                    it.putExtra("fbJsonObj", jsonObj.toString());
+//                    it.putExtra("id_doador",jsonObj_doador.getString("id"));
+                    startActivity(it);
+                }
+            });
+
+        }
+
+    @Override
+    protected void onResume() {
         super.onResume();
         mGoogleApiClient.connect();
     }
 
-        @Override
-        protected void onPause() {
+    @Override
+    protected void onPause() {
         super.onPause();
         mGoogleApiClient.disconnect();
     }
@@ -94,14 +117,16 @@ public class ActAceitar extends AppCompatActivity
             return;
         }
         Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher);
+        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
         mMarkerAtual = mMap.addMarker(
                 new MarkerOptions().title("Local atual").icon(icon).position(
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
         );
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        origem = String.valueOf(lastKnownLocation.getLatitude()) + "," + String.valueOf(lastKnownLocation.getLongitude());
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+        new ItineraireTask(this, mMap, origem, destino).execute();
     }
 
     @Override
@@ -124,10 +149,11 @@ public class ActAceitar extends AppCompatActivity
         //TextView txt = (TextView)findViewById(R.id.textView);
         //txt.setText("LAT:"+ location.getLatitude() +
         //       "LONG:"+ location.getLongitude());
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         mMarkerAtual.setPosition(latLng);
+        //origem = String.valueOf(location.getLatitude()) + "," + String.valueOf(location.getLongitude());
+        //new ItineraireTask(this, mMap, origem, destino).execute();
     }
 
 }

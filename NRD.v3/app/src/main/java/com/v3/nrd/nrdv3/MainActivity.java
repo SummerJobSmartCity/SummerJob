@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String fbJsonObjToString;
     JSONObject jsonObj;
     private RequestQueue requestQueue;
+    String id;
+    String tipo;
 
 
 
@@ -144,13 +146,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Intent it = new Intent(this, ActColetor.class);
                 //2 parametros(a classe que está chamando,a classe que quero chamar)
 //              enviar para o servidor id Coletor
+                tipo = "coletor";
+
+                try {
+                    jsonObj.put("tipo",tipo);
+                    id = jsonObj.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users",
+                        "http://172.28.144.181:5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(MainActivity.this, "Deu certo no MainActivity", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -161,12 +173,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         }
                 );
                 requestQueue.add(jsonObjectRequest);
+                it.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it);
                 break;
             case R.id.btnDoador:
                 Intent it2 = new Intent(this, ActDoador.class);
                 //2 parametros(a classe que está chamando,a classe que quero chamar)
+//              enviar para o servidor id do doador
+                tipo = "doador";
 
+                try {
+                    jsonObj.put("tipo",tipo);
+                    id = jsonObj.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users/" + id,
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(MainActivity.this, "Atualizando usuario -> doador", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonObjectRequest2);
+                it2.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it2);
                 break;
         }

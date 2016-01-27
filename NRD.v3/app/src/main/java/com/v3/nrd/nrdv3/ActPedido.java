@@ -11,7 +11,13 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
@@ -26,6 +32,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 //implementar o mapa e os botões
 
 public class ActPedido extends AppCompatActivity
@@ -39,15 +48,19 @@ public class ActPedido extends AppCompatActivity
     private Button btnRecusar1;
 
 //  receber lat e lng do doador informado pelo servidor
-    public double lat_doador;
-    public double lng_doador;
+//    receber dados do doador para mostrar na tela, informado pelo servidor
+    public double lat_coletor;
+    public double lng_coletor;
     public String origem;
-    public String destino;
+    public String destino; //informado pelo servidor, posição do doador
 
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
     Marker mMarkerAtual;
+    String fbJsonObjToString;
+    JSONObject jsonObj;
+    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +68,50 @@ public class ActPedido extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_pedido);
 
+
+        fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+        System.out.println("STRING NO BUSCA COLETOR ======================>   " + fbJsonObjToString);
+
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         btnAceitar = (Button) findViewById(R.id.btnAceitar);
         btnAceitar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(ActPedido.this, ActAceitar.class);
+
+                try {
+                    jsonObj.put("latitude", lat_coletor);
+                    jsonObj.put("longitude", lng_coletor);
+//                    jsonObj.put("tipo",tipo);
+                    id = jsonObj.getString("id");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users/" + id,
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(ActPedido.this, "Enviado posição do doador para servidor", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+
+                it.putExtra("fbJsonObj", jsonObj.toString());
+                it.putExtra("latlng_doador", destino);
                 startActivity(it);
             }
         });
@@ -69,6 +121,7 @@ public class ActPedido extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(ActPedido.this, ActColetor.class);
+                it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
                 //buscar doador
             }
@@ -127,7 +180,8 @@ public class ActPedido extends AppCompatActivity
                         new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
         );
 
-
+        lat_coletor = lastKnownLocation.getLatitude();
+        lng_coletor = lastKnownLocation.getLongitude();
         origem = String.valueOf(lastKnownLocation.getLatitude()) + "," + String.valueOf(lastKnownLocation.getLongitude());
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
@@ -154,11 +208,13 @@ public class ActPedido extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        //TextView txt = (TextView)findViewById(R.id.textView);
-        //txt.setText("LAT:"+ location.getLatitude() +
-        //       "LONG:"+ location.getLongitude());
+        TextView txt = (TextView)findViewById(R.id.textView5);
+        try {
+            txt.setText("Nome do Json: " + jsonObj.getString("name"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         System.out.println("ENTROU ONLOCATIONCHANGED:       ");
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         mMarkerAtual.setPosition(latLng);

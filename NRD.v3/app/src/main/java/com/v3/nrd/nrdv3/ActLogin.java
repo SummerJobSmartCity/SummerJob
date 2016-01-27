@@ -39,6 +39,7 @@ public class ActLogin extends AppCompatActivity{
     private CallbackManager callbackManager;
     private RequestQueue requestQueue;
     private JSONObject fbJsonObj = new JSONObject();
+    String user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +76,7 @@ public class ActLogin extends AppCompatActivity{
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+
 // App code
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
@@ -91,7 +93,7 @@ public class ActLogin extends AppCompatActivity{
                                     new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
-                                            Toast.makeText(ActLogin.this,"DEU CERTO PORRA", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(ActLogin.this,"Enviado para o serividor.", Toast.LENGTH_LONG).show();
 
                                         }
                                     },
@@ -106,19 +108,29 @@ public class ActLogin extends AppCompatActivity{
 
                             requestQueue.add(jsonObjectRequest);
 
-                            String user_name = object.getString("name"); //Obtendo o nome do usuario do facebook. Enviar para o servidor!
+                            user_name = object.getString("name"); //Obtendo o nome do usuario do facebook. Enviar para o servidor!
 
                             info.setText("Login:    " + user_name);
+                            Toast.makeText(ActLogin.this,
+                                    "Olá " + user_name + edtNome.getText().toString(),
+                                    Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+                        Intent it = new Intent(ActLogin.this, MainActivity.class);
+                        System.out.println("FBOBJ========>    " + fbJsonObj.toString());
+                        it.putExtra("fbJsonObj", fbJsonObj.toString());
+                        startActivity(it);
+
                     }
                 });
                 Bundle parameters = new Bundle();
                 parameters.putString("fields", "id,name,link,email,first_name,last_name,gender");
                 request.setParameters(parameters);
                 request.executeAsync();
+
+
 
             }
 

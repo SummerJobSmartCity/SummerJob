@@ -11,9 +11,14 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class ActColetor extends AppCompatActivity {
 
     private Button btnOk;
+    String fbJsonObjToString;
+    JSONObject jsonObj;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -24,15 +29,31 @@ public class ActColetor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_coletor);
+
+        fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+        System.out.println("STRING NO BUSCA COLETOR ======================>   " + fbJsonObjToString);
+
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
+
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        //espera chegar um pedido do servidor
+        //perguntar ao servidor se tem um pedido
+        //if GCM mandou para mim um pedido de algum doador:
+        //else o botao nao aparece, e fica carregando.
 
         btnOk=(Button)findViewById(R.id.btnOk);
         btnOk.setOnClickListener(new View.OnClickListener()        {
             @Override
             public void onClick (View v){
                 Intent it = new Intent(ActColetor.this, ActPedido.class);
+                it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
             }
         });
