@@ -38,7 +38,7 @@ public class AvaliarDoador extends AppCompatActivity {
         btnOk1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(AvaliarDoador.this, ActColetor.class);
+                Intent it = new Intent(AvaliarDoador.this, ActPedido.class);
                 it.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it);
             }

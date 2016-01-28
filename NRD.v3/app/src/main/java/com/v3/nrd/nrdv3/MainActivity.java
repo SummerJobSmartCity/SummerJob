@@ -2,13 +2,13 @@ package com.v3.nrd.nrdv3;
 
 
 import android.Manifest;
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
@@ -52,12 +52,18 @@ public class MainActivity extends AppCompatActivity
     private RequestQueue requestQueue;
     String id;
     String tipo;
+    String token;
     double lat;
     double lng;
-    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        SharedPreferences preferences;
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        token = preferences.getString("token", "");
+        System.out.println("TOKEN NA MAIN!!! =============>    " + token);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
 
@@ -169,7 +175,7 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnColetor:
-                Intent it = new Intent(this, ActColetor.class);
+                Intent it = new Intent(this, ActPedido.class);
 
 //                mProgressDialog.setTitle(getString(R.string.lbl_loading));
 //                mProgressDialog.setCancelable(false);
@@ -186,6 +192,7 @@ public class MainActivity extends AppCompatActivity
                     jsonObj.put("tipo",tipo);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
+                    jsonObj.put("gcmToken", token);
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
@@ -302,30 +309,5 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public class ProcessData extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... voids) {
 
-            //2 parametros(a classe que está chamando,a classe que quero chamar)
-//              enviar para o servidor id Coletor
-            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                    "http://172.28.144.181:5000/api/users",
-                    jsonObj,
-                    new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Toast.makeText(MainActivity.this, "Deu certo no MainActivity", Toast.LENGTH_LONG).show();
-                        }
-                    },
-
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                        }
-                    }
-            );
-            requestQueue.add(jsonObjectRequest);
-            return null;
-        }
-    }
 }
