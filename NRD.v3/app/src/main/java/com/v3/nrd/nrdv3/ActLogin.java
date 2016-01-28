@@ -88,7 +88,9 @@ public class ActLogin extends AppCompatActivity{
             }
         });
 
+        System.out.println("VAI CHAMAR O IF DO CHECKPLAYSERVICES");
         if (checkPlayServices()) {//se possui Google Play Service
+            System.out.println("ENTROU NO IF CHECKPLAYSERVICES");
             //chamar o registrationId
             Intent it = new Intent(this, RegistrationIntentService.class);
             System.out.println("intent");

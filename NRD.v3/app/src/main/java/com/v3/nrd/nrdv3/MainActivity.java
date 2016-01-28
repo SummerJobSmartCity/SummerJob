@@ -1,11 +1,15 @@
 package com.v3.nrd.nrdv3;
 
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,33 +25,36 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements
+        View.OnClickListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
-    //criar os objetos
     private Button btnColetor;
     private Button btnDoador;
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+
     private GoogleApiClient client;
+    GoogleApiClient mGoogleApiClient;
+
     String fbJsonObjToString;
     JSONObject jsonObj;
     private RequestQueue requestQueue;
     String id;
     String tipo;
+    double lat;
+    double lng;
     ProgressDialog mProgressDialog;
-
-
-
-
-//    protected JSONObject fbJsonObj = new JSONObject(fbJsonObjToString);
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +63,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         requestQueue = Volley.newRequestQueue(this);
-
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
@@ -70,9 +76,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnColetor.setOnClickListener(this);
         btnDoador.setOnClickListener(this);
 
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(LocationServices.API)
+                .build();
+
+        //createLocationRequest();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mGoogleApiClient.disconnect();
     }
 
     @Override
@@ -96,8 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 
     @Override
@@ -162,6 +184,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 try {
                     jsonObj.put("tipo",tipo);
+                    jsonObj.put("latitude", lat );
+                    jsonObj.put("longitude", lng );
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
@@ -201,6 +225,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 try {
                     jsonObj.put("tipo",tipo);
+                    jsonObj.put("latitude", lat );
+                    jsonObj.put("longitude", lng );
+                    //enviar token que ainda nao sei se esta sendo criado
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
@@ -228,6 +255,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 startActivity(it2);
                 break;
         }
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest mLocationRequest = new LocationRequest();
+        mLocationRequest.setInterval(1000);
+        mLocationRequest.setFastestInterval(500);
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+
+        lat = lastKnownLocation.getLatitude();
+        lng = lastKnownLocation.getLongitude();
+
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        createLocationRequest();
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+
     }
 
     public class ProcessData extends AsyncTask<Void, Void, Void> {

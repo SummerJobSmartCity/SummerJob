@@ -109,6 +109,38 @@ public class ActDoador extends AppCompatActivity
                         }
                 );
                 requestQueue.add(jsonObjectRequest2);
+
+                try {
+                    jsonObj = new JSONObject(fbJsonObjToString);
+                    jsonObj.put("latitude", lat );
+                    jsonObj.put("longitude", lng );
+//                    jsonObj.put("tipo",tipo);
+                    id = jsonObj.getString("id");
+                    System.out.println("Aquiiii id ::::::::: " + id);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/postColeta",
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(ActDoador.this, "Enviado post para o servidor", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                System.out.println("ENVIOU PARA O SERVIDOR O POST SOLICITANDO COLETA!!! ||||||||||\\");
+
+                requestQueue.add(jsonObjectRequest3);
+
                 it.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it);
             }

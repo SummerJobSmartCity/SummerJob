@@ -16,23 +16,19 @@ public class MyGcmListenerService extends GcmListenerService {
 
     @Override
     public void onMessageReceived(String from, Bundle data) {
-//        //super.onMessageReceived(from,data);
-//        String title = data.getString("title");
+        super.onMessageReceived(from,data);
+        String title = data.getString("title");
 //        String message = data.getString("message");
 //
 //        String nome_doador=data.getString("nomedoador");
 //        String telefone_doador=data.getString("telefonedoador");
-        String title="Rubão!!!!!!";
+//        String title="Rubão!!!!!!";
 
         //Intent it= new Intent(MyGcmListenerService.this, ActPedido.class);
 
-
-//
 //        String nome_coletor=data.getString("nomecoletor");
 //        String telefone_coletor=data.getString("telefonecoletor");
 
-
-//
 //        Log.i(TAG, title);
 //        Log.i(TAG, message);
 

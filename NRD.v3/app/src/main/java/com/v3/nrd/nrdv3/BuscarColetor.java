@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.v3.nrd.nrdv3.GCM.MyGcmListenerService;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,6 +25,7 @@ public class BuscarColetor extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.buscar_coletor);
+        MyGcmListenerService mygcm = new MyGcmListenerService();
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         System.out.println("STRING NO BUSCA COLETOR ======================>   " + fbJsonObjToString);
