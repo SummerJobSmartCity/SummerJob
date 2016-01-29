@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -46,22 +47,34 @@ import org.json.JSONObject;
 //implementar o mapa e os botões
 
 public class ActPedido extends AppCompatActivity
-        implements
-            GoogleApiClient.ConnectionCallbacks,
-            GoogleApiClient.OnConnectionFailedListener,
-            LocationListener {
+    implements
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener,
+        LocationListener {
 
     private Button btnColetaEfetuada;
-
     private static String mNomeDoador = "";
+    private static String mEmail = "";
     private static String mComando = "";
-    UpdateActPedido mReceiver;
     private static boolean flag = false;
     private TextView mNomeDoadorTextView;
-    Location lastKnownLocation;
+    private TextView mEmailDoador;
+    private RequestQueue requestQueue;
+
     public double lat_coletor;
     public double lng_coletor;
-    //private TextView mTelefoneDoadorTextView;
+    public String origem;
+    public String destino;                  //informado pelo servidor, posição do doador
+
+    GoogleApiClient mGoogleApiClient;
+    GoogleMap mMap;
+    Marker mMarkerAtual;
+    JSONObject jsonObj;
+    String fbJsonObjToString;
+    String id;
+    String tipo;
+    UpdateActPedido mReceiver;
+    Location lastKnownLocation;
 
 
     public class ProcessData extends AsyncTask<Void, Void, Void> {
@@ -70,7 +83,44 @@ public class ActPedido extends AppCompatActivity
         public ProcessData(){
             mProgressDialog = new ProgressDialog(ActPedido.this);
             mProgressDialog.setTitle(getString(R.string.lbl_loading));
-            mProgressDialog.setCancelable(false);
+            mProgressDialog.setCancelable(true);
+            mProgressDialog.setButton("Cancelar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent it= new Intent(ActPedido.this,MainActivity.class);
+                    it.putExtra("fbJsonObj", jsonObj.toString());
+
+                    try {
+                        tipo = null;
+                        jsonObj.put("tipo",tipo);
+                        id = jsonObj.getString("id");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
+                            "http://172.28.144.181:5000/api/users/" + id,
+                            jsonObj,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(ActPedido.this, "Atualizando usuario -> doador", Toast.LENGTH_LONG).show();
+                                }
+                            },
+
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                }
+                            }
+                    );
+                    requestQueue.add(jsonObjectRequest2);
+
+                    startActivity(it);
+                // Use either finish() or return() to either close the activity or just the dialog
+                return;
+                }
+            });
         }
 
         @Override
@@ -89,29 +139,15 @@ public class ActPedido extends AppCompatActivity
             flag = false;
             mProgressDialog.dismiss();
             mNomeDoadorTextView.setText(mNomeDoador);
+            mEmailDoador.setText(mEmail);
+
         }
     }
 
 
-    //  receber lat e lng do doador informado pelo servidor
-//    receber dados do doador para mostrar na tela, informado pelo servidor
-
-    public String origem;
-    public String destino; //informado pelo servidor, posição do doador
-
-
-    private RequestQueue requestQueue;
-
-    GoogleApiClient mGoogleApiClient;
-    GoogleMap mMap;
-    Marker mMarkerAtual;
-    String fbJsonObjToString;
-    JSONObject jsonObj;
-    String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("ENTROU ONCREATE:       ");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.act_pedido);
 
@@ -123,7 +159,6 @@ public class ActPedido extends AppCompatActivity
 
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
-        System.out.println("STRING NO BUSCA COLETOR ======================>   " + fbJsonObjToString);
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
@@ -137,7 +172,6 @@ public class ActPedido extends AppCompatActivity
             public void onClick(View v) {
                 Intent it = new Intent(ActPedido.this, AvaliarDoador.class);
                 it.putExtra("fbJsonObj", jsonObj.toString());
-//              it.putExtra("id_doador",jsonObj_doador.getString("id"));
                 startActivity(it);
             }
         });
@@ -152,22 +186,19 @@ public class ActPedido extends AppCompatActivity
                 getSupportFragmentManager().findFragmentById(R.id.map2);
         mMap = mapFragment.getMap();
 
-        //origem = "-8.0599384,-34.8726423";
         mNomeDoadorTextView = (TextView) findViewById(R.id.nome_doador);
+        mEmailDoador = (TextView) findViewById(R.id.telefone_doador);
 
-//        destino = "-8.049414,-34.881700";
     }
 
     @Override
     protected void onResume() {
-        System.out.println("ENTROU ONRESUME:       ");
         super.onResume();
         mGoogleApiClient.connect();
     }
 
     @Override
     protected void onPause() {
-        System.out.println("ENTROU ONPAUSE:       ");
         super.onPause();
         mGoogleApiClient.disconnect();
         unregisterReceiver(mReceiver);
@@ -179,10 +210,7 @@ public class ActPedido extends AppCompatActivity
         new ProcessData().execute();
     }
 
-
     protected void createLocationRequest() {
-        System.out.println("ENTROU CREATELOCATIONREQUEST:       ");
-
         LocationRequest mLocationRequest = new LocationRequest();
         mLocationRequest.setInterval(1000);
         mLocationRequest.setFastestInterval(500);
@@ -217,7 +245,6 @@ public class ActPedido extends AppCompatActivity
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        System.out.println("ENTROU ONCONNECTED:       ");
         createLocationRequest();
     }
 
@@ -233,25 +260,23 @@ public class ActPedido extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        TextView txt = (TextView)findViewById(R.id.textView1);
-        try {
-            txt.setText("Nome do Json: " + jsonObj.getString("name"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        System.out.println("ENTROU ONLOCATIONCHANGED:       ");
+//        TextView txt = (TextView)findViewById(R.id.textView1);
+//        try {
+//            txt.setText("Nome: " + jsonObj.getString("name"));
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
         mMarkerAtual.setPosition(latLng);
     }
 
     public class UpdateActPedido extends BroadcastReceiver {
-
         @Override
         public void onReceive(final Context context, Intent intent) {
             mComando = intent.getStringExtra("comando");
 
-            Log.d("UpdateActPedido", "PORRA");
+            Log.d("UpdateActPedido", "ENTROU");
             if(mComando.equals("update")){
                 lat_coletor = lastKnownLocation.getLatitude();
                 lng_coletor = lastKnownLocation.getLongitude();
@@ -271,7 +296,7 @@ public class ActPedido extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActPedido.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActPedido.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -283,17 +308,17 @@ public class ActPedido extends AppCompatActivity
                 );
                 requestQueue.add(jsonObjectRequest);
 
-                Log.d("UpdateActPedido", "UPDATE PORRA");
+                Log.d("UpdateActPedido", "UPDATE SAIU");
             }
             else {
                 flag = true;
-                mNomeDoador = intent.getStringExtra("nome");
+                mNomeDoador = intent.getStringExtra("nomedoador");
+                mEmail = intent.getStringExtra("emaildoador");
                 destino = intent.getStringExtra("latitude") + "," + intent.getStringExtra("longitude");
                 System.out.println("Destino do servidor!!!!                      " + destino);
                 createLocationRequest();
 
                 // mTelefoneDoador=intent.getStringExtra("telefonedoador");
-                // Post the UI upfdating code to our Handler
                 Log.d("UpdateActPedido", "DOADOR DADASDASDASDAS");
             }
         }

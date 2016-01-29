@@ -35,10 +35,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-//para implementar o mapa
-
-
-//configurar o mapa com localização ajustável
 
 
 public class ActDoador extends AppCompatActivity
@@ -48,17 +44,19 @@ public class ActDoador extends AppCompatActivity
         LocationListener {
 
     private Button btnSolicitar;
-    public double lat;
-    public double lng;
+    private RequestQueue requestQueue;
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
     Marker mMarkerAtual;
+
+
     JSONObject jsonObj;
-    private RequestQueue requestQueue;
     String fbJsonObjToString;
     String id;
-    String tipo = "doador";
+
+    public double lat;
+    public double lng;
 
 
 
@@ -76,18 +74,13 @@ public class ActDoador extends AppCompatActivity
         btnSolicitar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent it = new Intent(ActDoador.this, BuscarColetor.class);
-                System.out.println("HELLO 2 LATI :      " + lat);
-                System.out.println("HELLO 2 LATI :      " + lng);
-        //      Enviar para o servidor LAT e LNG do doador
+                Intent it = new Intent(ActDoador.this, ActResultado.class);
 
                 try {
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-//                    jsonObj.put("tipo",tipo);
                     id = jsonObj.getString("id");
-                    System.out.println("Aquiiii id ::::::::: " + id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -98,7 +91,7 @@ public class ActDoador extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActDoador.this, "Enviado minha posição para o servidor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActDoador.this, "Enviado localização ao Servidor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -114,9 +107,7 @@ public class ActDoador extends AppCompatActivity
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-//                    jsonObj.put("tipo",tipo);
                     id = jsonObj.getString("id");
-                    System.out.println("Aquiiii id ::::::::: " + id);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -127,7 +118,7 @@ public class ActDoador extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActDoador.this, "Enviado post para o servidor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActDoador.this, "Enviado post ao servidor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -217,10 +208,6 @@ public class ActDoador extends AppCompatActivity
 
     @Override
     public void onLocationChanged(Location location) {
-        //TextView txt = (TextView)findViewById(R.id.textView);
-        //txt.setText("LAT:"+ location.getLatitude() +
-         //       "LONG:"+ location.getLongitude());
-
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
         mMarkerAtual.setPosition(latLng);

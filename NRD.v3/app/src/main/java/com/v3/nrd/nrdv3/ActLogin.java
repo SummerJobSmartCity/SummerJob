@@ -43,18 +43,15 @@ public class ActLogin extends AppCompatActivity{
 
     private static final String SERVER_API_KEY = "AIzaSyBOL9JDjuKHKvw6QHZ16lo5XXk9ffmfcUo";
     private static final String SENDER_ID = "1023915214454";
-
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-
     private TextView info;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
     private RequestQueue requestQueue;
     private JSONObject fbJsonObj = new JSONObject();
-    String user_name;
-
     private GoogleApiClient client;
 
+    String user_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +64,6 @@ public class ActLogin extends AppCompatActivity{
         callbackManager = CallbackManager.Factory.create();
 
         final EditText edtNome = (EditText)findViewById(R.id.edtNome);
-        final EditText edtNome2 = (EditText)findViewById(R.id.editText);
 
         loginButton = (LoginButton)findViewById(R.id.login_button);
 
@@ -83,15 +79,12 @@ public class ActLogin extends AppCompatActivity{
 
                 Intent it = new Intent(ActLogin.this, MainActivity.class);
                 System.out.println("FBOBJ========>    " + fbJsonObj.toString());
-                it.putExtra("fbJsonObj",fbJsonObj.toString());
+                it.putExtra("fbJsonObj", fbJsonObj.toString());
                 startActivity(it);
             }
         });
 
-        System.out.println("VAI CHAMAR O IF DO CHECKPLAYSERVICES");
-        if (checkPlayServices()) {//se possui Google Play Service
-            System.out.println("ENTROU NO IF CHECKPLAYSERVICES");
-            //chamar o registrationId
+        if (checkPlayServices()) {      //se possui Google Play Service
             Intent it = new Intent(this, RegistrationIntentService.class);
             System.out.println("intent");
             startService(it);
@@ -106,14 +99,11 @@ public class ActLogin extends AppCompatActivity{
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-//Application code
                         Log.v("LoginActivity", object.toString());
                         String stringdolog = object.toString();
                         fbJsonObj = response.getJSONObject();
 
                         try {
-// info.setText("Login " + response.getJSONObject().toString());
-
                             final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://172.28.144.181:5000/api/users", fbJsonObj,
                                     new Response.Listener<JSONObject>() {
                                         @Override
@@ -130,14 +120,13 @@ public class ActLogin extends AppCompatActivity{
                                     }
 
                             );
-
                             requestQueue.add(jsonObjectRequest);
 
                             user_name = object.getString("name"); //Obtendo o nome do usuario do facebook. Enviar para o servidor!
 
                             info.setText("Login:    " + user_name);
                             Toast.makeText(ActLogin.this,
-                                    "Olá " + user_name + edtNome.getText().toString(),
+                                    "Seja bem-vindo  " + user_name + edtNome.getText().toString(),
                                     Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
@@ -154,9 +143,6 @@ public class ActLogin extends AppCompatActivity{
                 parameters.putString("fields", "id,name,link,email,first_name,last_name,gender");
                 request.setParameters(parameters);
                 request.executeAsync();
-
-
-
             }
 
             @Override

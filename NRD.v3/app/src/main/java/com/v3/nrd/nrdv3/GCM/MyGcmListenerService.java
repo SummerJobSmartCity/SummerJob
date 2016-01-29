@@ -18,20 +18,26 @@ public class MyGcmListenerService extends GcmListenerService {
     public void onMessageReceived(String from, Bundle data) {
         super.onMessageReceived(from, data);
         String comando = data.getString("comando");
-        String nome = data.getString("nome");
+        String nomeDoador = data.getString("nomedoador");
+        String emaildoador = data.getString("emaildoador");
+        String nomeColetor = data.getString("nomecoletor");
         String latitude = data.getString("latitude");
         String longitude = data.getString("longitude");
 
 
         Intent it = new Intent("nrd.UpdateActPedido");
+        Intent it2 = new Intent("nrd.UpdateActResultado");
+
         Log.i(TAG, comando);
         it.putExtra("comando", comando);
-        it.putExtra("nome", nome);
+        it.putExtra("nomedoador", nomeDoador);
+        it.putExtra("emaildoador", emaildoador);
         it.putExtra("latitude", latitude);
         it.putExtra("longitude", longitude);
-
-
+        it2.putExtra("nomecoletor", nomeColetor);
 
         sendBroadcast(it);
+        sendBroadcast(it2);
+
     }
 }

@@ -35,7 +35,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
-        implements
+    implements
         View.OnClickListener,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
@@ -43,18 +43,20 @@ public class MainActivity extends AppCompatActivity
 
     private Button btnColetor;
     private Button btnDoador;
-
     private GoogleApiClient client;
-    GoogleApiClient mGoogleApiClient;
-
-    String fbJsonObjToString;
-    JSONObject jsonObj;
     private RequestQueue requestQueue;
+
+    double lat;
+    double lng;
+
+    GoogleApiClient mGoogleApiClient;
+    JSONObject jsonObj;
+    String fbJsonObjToString;
     String id;
     String tipo;
     String token;
-    double lat;
-    double lng;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +91,6 @@ public class MainActivity extends AppCompatActivity
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
-        //createLocationRequest();
     }
 
     @Override
@@ -107,7 +107,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
@@ -177,15 +176,6 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnColetor:
                 Intent it = new Intent(this, ActPedido.class);
 
-//                mProgressDialog.setTitle(getString(R.string.lbl_loading));
-//                mProgressDialog.setCancelable(false);
-//                mProgressDialog.show();
-
-//                ProcessData p = new ProcessData();
-//                p.execute();
-
-                //2 parametros(a classe que está chamando,a classe que quero chamar)
-//              enviar para o servidor id Coletor
                 tipo = "coletor";
 
                 try {
@@ -222,19 +212,13 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnDoador:
                 Intent it2 = new Intent(this, ActDoador.class);
 
-//                mProgressDialog.setTitle(getString(R.string.lbl_loading));
-//                mProgressDialog.setCancelable(false);
-//                mProgressDialog.show();
-
-                //2 parametros(a classe que está chamando,a classe que quero chamar)
-//              enviar para o servidor id do doador
                 tipo = "doador";
 
                 try {
                     jsonObj.put("tipo",tipo);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-                    //enviar token que ainda nao sei se esta sendo criado
+                    jsonObj.put("gcmToken", token);
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
