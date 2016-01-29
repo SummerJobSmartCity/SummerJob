@@ -29,7 +29,7 @@ function findColetor(doador,users){
 	}
 	if(coletor !== null){
 		for(i = 0, len = users.length; i < len; i++){
-			if( (date.getTime() - users[i].updated.getTime()) < 120000 ){
+			if( (date.getTime() - users[i].updated.getTime()) < 300000 ){
 				distancia = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[i].latitude), parseFloat(users[i].longitude));
 				if(distancia < distanciaMin){
 					distanciaMin = distancia;
@@ -109,6 +109,8 @@ router.route('/users')
 		user.gcmToken = req.body.gcmToken;
 		user.latitude = req.body.latitude;
 		user.longitude = req.body.longitude;
+		user.avaliarDoador = 0;
+		user.avaliarColetor = 0;
 		user.save(function(err){
 			if(err){
 				res.send("Deu errado!");
@@ -126,16 +128,20 @@ router.route('/users')
 //Pedido de Coleta
 router.route('/postColeta')
 	.post(function(req,res){
-		var token = "fGRj6QvYk7w:APA91bGmDRooHNOATIsnMcAcyIMWuIIjtW6u7IpYog_XPe_4ysBNL4NLEQgAh1krrZNQELeCnng7IsY3KzFEf_Qxn5O0qRlbyLEUwMzNpUIvLMR4Cm_JQor5XyaMl_qxMS8KQc3WiS-_";
-		// var token = "fUYyvIiBDNk:APA91bHI-D86osH3q_ajPzc5K35Sive_HlegXc4wRKc0OmLkHRSl4I9YiAK2Nf04weKLbOzhPGouDsnIybPLry3Geb-6UDT-92tE5bLSFkhwmQ68nTfWUljVSkdni68bIbGheVjeUG5w";
+		// var token = "dV9kLdc96bA:APA91bHqE6_o2DuBt7MIaw0ASW3Jp7Ane7BI7H_vXdA5bCK1vfougTKq1caT2K5QbJrhqrLoOLyL4ExmHymozoC_nn99z65rHiIaieMjfnU7A6Ld-yJgzgVlnCk-mMX2p-do92UwbUj9";
+
 		var coletorEscolhido = new Users();
 		var userArray;
+		var coletor = new Users();
 		var date = new Date();
+		var i = 0;
+		var len = 0;
 		var doador = req.body;
 		var api_key = "AIzaSyBOL9JDjuKHKvw6QHZ16lo5XXk9ffmfcUo";
 		var payload = {
-			comando : "upddfgfdgdfgdfgdfgdate" ,
-			nome : "RUBAO EH VIDA LOKA",
+			comando : "update" ,
+			nomedoador : doador.name,
+			nomecoletor : "AINDA NAO TEM",
 			latitude : doador.latitude,
 			longitude : doador.longitude
 		};
@@ -145,81 +151,101 @@ router.route('/postColeta')
 		var message = new gcm.Message({  contentAvailable : true });
 		message.addData(payload);
 
-		// Users.find( { "tipo" : "coletor" }, function(err, users) {
-		// 		if (err)
-		// 			res.send(err);
-		// 		else{
-		// 			userArray = users;
-		// 			for(coletor in users){
+		Users.find( { "tipo" : "coletor" }, function(err, users) {
+				if (err)
+					res.send(err);
+				else{
+					userArray = users;
+					for(i=0, len = users.length; i < len ; i++ ){
+						coletor = users[i];
+						console.log(JSON.stringify(coletor));
 		// 				if( (date.getTime() - coletor.updated.getTime()) > 15000 ){  //15 seg so pra testar. Tem q ser mais!
-		// 					var token = coletor.gcmToken;
+							var token = coletor.gcmToken;
 		// 	//Token eh unico de cada aparelho PARA COLETORES dzPJe6-oc-s:APA91bHXNF0f-QCjus6AXXmBobLtKBJgx6zz3Ddux2QAxMQwGThv7CMT5Mce3ZlZPQSLVn-nAh9NEDW41EgfaRXh5c2Aua1EkYZDiFgmILwt4jmEvXYB7WUVuDXQ-64teyyYgoxPolAW
 							sender.send(message, token , function(err, result) {
 	//"dzPJe6-oc-s:APA91bHXNF0f-QCjus6AXXmBobLtKBJgx6zz3Ddux2QAxMQwGThv7CMT5Mce3ZlZPQSLVn-nAh9NEDW41EgfaRXh5c2Aua1EkYZDiFgmILwt4jmEvXYB7WUVuDXQ-64teyyYgoxPolAW"
 								if (err) {  //dlOXTfhpn_o:APA91bEvQuu4KH3bWdl23fDrfBjDnwoEl8_0rL7kfBbp5iHZ_NhdgvT8Vonx8oQDQSvnAqcCbgsA7yI412dnbreNBwQ1l5W553YsM13IxengvlxPoBb07cbCM80-C2S2swOr_opGqFp7
-									console.log("Result: " + JSON.stringify(err));
+									// console.log("Result: " + JSON.stringify(err));
 									res.send(err);
 						    }
 								else {
-									console.log("Result: " + JSON.stringify(result));
-						    	res.send(result);
+									// console.log("Result: " + JSON.stringify(result));
+						    	// res.send(result);
 						   	}
 						  });
 					// 	}
-					// }
+					}
 
-					// setTimeout(function(){
-					// 	////////PRIMEIRO O DOADOR VAI SABER QUEM EH O COLETOR
-					// 	coletorEscolhido = findColetor(doador,userArray);
-					// 	var senderDoador = new gcm.Sender(api_key); //    AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA
-					// 	//AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw
-					// 	var messageDoador = new gcm.Message({  contentAvailable : true });
-					// 	var jsonColetorString = JSON.stringify(coletorEscolhido);
-					// 	var payloadDoador = {
-					// 		title : jsonColetorString ,
-					// 		message : "Doador Recebeu o Coletor"
-					// 	};
-					// 	messageDoador.addData(payloadDoador);
-					// 	var tokenDoador = doador.gcmToken;
-					// 	//////////////////////////
-					// 	senderDoador.send(messageDoador, tokenDoador , function(err, result) {
-					// 		if (err) {
-					// 			console.log("Result: " + JSON.stringify(err));
-					// 			// res.send(err);
-					// 		}
-					// 		else {
-					// 			console.log("Result: " + JSON.stringify(result));
-					// 			// res.send(result);
-					// 		}
-					// 	})
-					// 	//////////////////////AGORA O COLETOR SABE O DOADOR
-					// 	var senderColetor = new gcm.Sender(api_key); //    AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA
-					// 	//AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw
-					// 	var messageColetor = new gcm.Message({  contentAvailable : true });
-					// 	var jsonDoadorString = JSON.stringify(doador);
-					// 	var payloadColetor = {
-					// 		title : jsonDoadorString ,
-					// 		message : "Coletor Recebeu o Doador"
-					// 	};
-					// 	messageColetor.addData(payloadColetor);
-					// 	var tokenColetor = coletorEscolhido.gcmToken;
-					// 	//////////////////////////
-					// 	senderColetor.send(messageColetor, tokenColetor , function(err, result) {
-					// 		if (err) {
-					// 			console.log("Result: " + JSON.stringify(err));
-					// 			// res.send(err);
-					// 		}
-					// 		else {
-					// 			console.log("Result: " + JSON.stringify(result));
-					// 			// res.send(result);
-					// 		}
-					// 	})
-					// 	//////////////////////
-					// },15000);
-					// }
-		// 		res.send(JSON.stringify(doador) + JSON.stringify(coletorEscolhido));
-		// });
-	console.log(JSON.stringify(req.body));
+					setTimeout(function(){
+						////////PRIMEIRO O DOADOR VAI SABER QUEM EH O COLETOR
+						coletorEscolhido = findColetor(doador,userArray);
+
+
+							if(coletorEscolhido.name === undefined){
+								console.log("NAO ACHOU UM COLETOR");
+							}
+							else{
+								console.log("ACHOU UM COLETOR");
+								console.log(JSON.stringify(coletorEscolhido));
+								var dist = 0;
+								dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
+								var senderDoador = new gcm.Sender(api_key);
+								var messageDoador = new gcm.Message({  contentAvailable : true });
+								var jsonColetorString = JSON.stringify(coletorEscolhido);
+								var payloadDoador = {
+									comando : "coletorEscolhido",
+									nomecoletor : coletorEscolhido.name ,
+									distancia : dist.toString(),
+									emailcoletor : coletorEscolhido.email
+								};
+								messageDoador.addData(payloadDoador);
+								var tokenDoador = doador.gcmToken;
+								//////////////////////////
+								senderDoador.send(messageDoador, tokenDoador , function(err, result) {
+									if (err) {
+										console.log("Result: " + JSON.stringify(err));
+										res.send(err);
+									}
+									else {
+										console.log("Result: " + JSON.stringify(result));
+										// res.send(result);
+									}
+								})
+								//////////////////////AGORA O COLETOR SABE O DOADOR
+								var senderColetor = new gcm.Sender(api_key); //    AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA
+								//AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw
+								var messageColetor = new gcm.Message({  contentAvailable : true });
+								var jsonDoadorString = JSON.stringify(doador);
+								var payloadColetor = {
+									comando : "doadorEscolhido",
+									nomedoador : doador.name ,
+									distancia : dist.toString(),
+									emaildoador : doador.email,
+									latitude : doador.latitude,
+									longitude : doador.longitude
+								};
+								messageColetor.addData(payloadColetor);
+								var tokenColetor = coletorEscolhido.gcmToken;
+								//////////////////////////
+								senderColetor.send(messageColetor, tokenColetor , function(err, result) {
+									if (err) {
+										console.log("Result: " + JSON.stringify(err));
+										res.send(err);
+									}
+									else {
+										console.log("Result: " + JSON.stringify(result));
+										// res.send(result);
+									}
+								})
+								//////////////////////
+							}
+						},10000);
+
+
+					}
+				// res.send(JSON.stringify(doador) + "\n\n\n" + JSON.stringify(coletorEscolhido));
+		});
+	// console.log(JSON.stringify(req.body));
 	});
 
 
@@ -246,6 +272,8 @@ router.route('/users/:id')
 								user.gcmToken = req.body.gcmToken;
 								user.latitude = req.body.latitude;
 								user.longitude = req.body.longitude;
+								user.avaliarDoador = req.body.avaliarDoador;
+								user.avaliarColetor = req.body.avaliarColetor;
 								user.updated = new Date();
 						  // update the user info
 						// save the user

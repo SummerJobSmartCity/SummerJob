@@ -14,6 +14,8 @@ var UserSchema = mongoose.Schema({
 	api_key : String,
 	latitude : String,
 	longitude : String,
+	avaliarDoador : String,
+	avaliarColetor : String,
 	updated: {type: Date, default: Date.now}
 
 });
