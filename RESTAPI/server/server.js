@@ -98,28 +98,62 @@ router.route('/users')
 //função post
 	.post( function(req,res){
 		var user = new Users();
-		user.last_name = req.body.last_name;
-		user.id = req.body.id;
-		user.gender = req.body.gender;
-		user.first_name = req.body.first_name;
-		user.email = req.body.email;
-		user.link = req.body.link;
-		user.name = req.body.name;
-		user.tipo = req.body.tipo;
-		user.gcmToken = req.body.gcmToken;
-		user.latitude = req.body.latitude;
-		user.longitude = req.body.longitude;
-		user.avaliarDoador = 0;
-		user.avaliarColetor = 0;
-		user.save(function(err){
-			if(err){
-				res.send("Deu errado!");
-			}
+		Users.findOne({"id" : req.body.id }, function(err,doc){
+			if(err){console.log(err);}
 			else{
-				contador++;
-				res.json({message : "" + contador + " Usuarios adicionado!!!!"});
+				if(doc == null){
+					user.last_name = req.body.last_name;
+					user.id = req.body.id;
+					user.gender = req.body.gender;
+					user.first_name = req.body.first_name;
+					user.email = req.body.email;
+					user.link = req.body.link;
+					user.name = req.body.name;
+					user.tipo = req.body.tipo;
+					user.gcmToken = req.body.gcmToken;
+					user.latitude = req.body.latitude;
+					user.longitude = req.body.longitude;
+					user.avaliarDoador = "0";
+					user.avaliarColetor = "0";
+					user.save(function(err){
+						if(err){
+							res.send("Deu errado!");
+						}
+						else{
+							contador++;
+							res.json({message : "" + contador + " Usuarios adicionado!!!!"});
+						}
+					});
+				}
+				else{
+					res.json({message : "Usuario ja EXISTE!!!"});
+				}
 			}
 		});
+
+
+			// user.last_name = req.body.last_name;
+			// user.id = req.body.id;
+			// user.gender = req.body.gender;
+			// user.first_name = req.body.first_name;
+			// user.email = req.body.email;
+			// user.link = req.body.link;
+			// user.name = req.body.name;
+			// user.tipo = req.body.tipo;
+			// user.gcmToken = req.body.gcmToken;
+			// user.latitude = req.body.latitude;
+			// user.longitude = req.body.longitude;
+			// user.avaliarDoador = 0;
+			// user.avaliarColetor = 0;
+			// user.save(function(err){
+			// 	if(err){
+			// 		res.send("Deu errado!");
+			// 	}
+			// 	else{
+			// 		contador++;
+			// 		res.json({message : "" + contador + " Usuarios adicionado!!!!"});
+			// 	}
+			// });
 
 	});
 
@@ -185,59 +219,67 @@ router.route('/postColeta')
 								console.log("NAO ACHOU UM COLETOR");
 							}
 							else{
-								console.log("ACHOU UM COLETOR");
-								console.log(JSON.stringify(coletorEscolhido));
-								var dist = 0;
-								dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
-								var senderDoador = new gcm.Sender(api_key);
-								var messageDoador = new gcm.Message({  contentAvailable : true });
-								var jsonColetorString = JSON.stringify(coletorEscolhido);
-								var payloadDoador = {
-									comando : "coletorEscolhido",
-									nomecoletor : coletorEscolhido.name ,
-									distancia : dist.toString(),
-									emailcoletor : coletorEscolhido.email
-								};
-								messageDoador.addData(payloadDoador);
-								var tokenDoador = doador.gcmToken;
-								//////////////////////////
-								senderDoador.send(messageDoador, tokenDoador , function(err, result) {
-									if (err) {
-										console.log("Result: " + JSON.stringify(err));
-										res.send(err);
-									}
-									else {
-										console.log("Result: " + JSON.stringify(result));
-										// res.send(result);
-									}
-								})
-								//////////////////////AGORA O COLETOR SABE O DOADOR
-								var senderColetor = new gcm.Sender(api_key); //    AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA
-								//AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw
-								var messageColetor = new gcm.Message({  contentAvailable : true });
-								var jsonDoadorString = JSON.stringify(doador);
-								var payloadColetor = {
-									comando : "doadorEscolhido",
-									nomedoador : doador.name ,
-									distancia : dist.toString(),
-									emaildoador : doador.email,
-									latitude : doador.latitude,
-									longitude : doador.longitude
-								};
-								messageColetor.addData(payloadColetor);
-								var tokenColetor = coletorEscolhido.gcmToken;
-								//////////////////////////
-								senderColetor.send(messageColetor, tokenColetor , function(err, result) {
-									if (err) {
-										console.log("Result: " + JSON.stringify(err));
-										res.send(err);
-									}
-									else {
-										console.log("Result: " + JSON.stringify(result));
-										// res.send(result);
-									}
-								})
-								//////////////////////
+								Users.findOne({ "id" : doador.id }, function(err, user){ doador = user; });
+								if(doador.tipo === ""){
+									console.log(JSON.stringify(doador));
+								}
+								else{
+									console.log("ACHOU UM COLETOR");
+									console.log(JSON.stringify(coletorEscolhido));
+									var dist = 0;
+									dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
+									var senderDoador = new gcm.Sender(api_key);
+									var messageDoador = new gcm.Message({  contentAvailable : true });
+									var jsonColetorString = JSON.stringify(coletorEscolhido);
+									var payloadDoador = {
+										comando : "coletorEscolhido",
+										nomecoletor : coletorEscolhido.name ,
+										distancia : dist.toString(),
+										emailcoletor : coletorEscolhido.email
+									};
+									messageDoador.addData(payloadDoador);
+									var tokenDoador = doador.gcmToken;
+									//////////////////////////
+									senderDoador.send(messageDoador, tokenDoador , function(err, result) {
+										if (err) {
+											console.log("Result: " + JSON.stringify(err));
+											res.send(err);
+										}
+										else {
+											console.log("Result: " + JSON.stringify(result));
+											// res.send(result);
+										}
+									})
+									//////////////////////AGORA O COLETOR SABE O DOADOR
+									var senderColetor = new gcm.Sender(api_key); //    AIzaSyBmfw1eEDkMQCPVwQPFC43ywxSoLDCfVDA
+									//AIzaSyDW7CS4GIXuggF-zvuvya7ZXfoAk20CKGw
+									var messageColetor = new gcm.Message({  contentAvailable : true });
+									var jsonDoadorString = JSON.stringify(doador);
+									var payloadColetor = {
+										comando : "doadorEscolhido",
+										nomedoador : doador.name ,
+										distancia : dist.toString(),
+										emaildoador : doador.email,
+										latitude : doador.latitude,
+										longitude : doador.longitude
+									};
+									messageColetor.addData(payloadColetor);
+									var tokenColetor = coletorEscolhido.gcmToken;
+									//////////////////////////
+									senderColetor.send(messageColetor, tokenColetor , function(err, result) {
+										if (err) {
+											console.log("Result: " + JSON.stringify(err));
+											res.send(err);
+										}
+										else {
+											console.log("Result: " + JSON.stringify(result));
+											// res.send(result);
+										}
+									})
+									//////////////////////
+
+								}
+
 							}
 						},10000);
 
@@ -272,8 +314,10 @@ router.route('/users/:id')
 								user.gcmToken = req.body.gcmToken;
 								user.latitude = req.body.latitude;
 								user.longitude = req.body.longitude;
-								user.avaliarDoador = req.body.avaliarDoador;
-								user.avaliarColetor = req.body.avaliarColetor;
+								var numD = parseFloat(user.avaliarDoador) + parseFloat(req.body.avaliarDoador);
+								user.avaliarDoador = numD.toString();
+								var numC = parseFloat(user.avaliarColetor) + parseFloat(req.body.avaliarColetor);
+								user.avaliarColetor = numC.toString();
 								user.updated = new Date();
 						  // update the user info
 						// save the user
