@@ -13,6 +13,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,17 +28,25 @@ import org.json.JSONObject;
 public class ActResultado extends AppCompatActivity {
 
     private Button btnColetaEfetuada;
-    private Button btnRecusar;
+    private RequestQueue requestQueue;
+
     String fbJsonObjToString;
     JSONObject jsonObj;
 
+    String id;
+    String tipo;
+
     private static String mNomeColetor = "";
+    private static String idcoletor = "";
+
     UpdateActResultado mReceiver;
     private static boolean flag = false;
     private TextView mNomeColetorTextView;
+    ProgressDialog mProgressDialog;
+    private static String mComando = "";
+
 
     public class ProcessDataResultado extends AsyncTask<Void, Void, Void> {
-        ProgressDialog mProgressDialog;
 
         public ProcessDataResultado(){
             mProgressDialog = new ProgressDialog(ActResultado.this);
@@ -38,9 +54,38 @@ public class ActResultado extends AppCompatActivity {
             mProgressDialog.setCancelable(false);
             mProgressDialog.setButton("Cancelar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
-                    Intent it = new Intent(ActResultado.this, ActDoador.class);
-                    it.putExtra("fbJsonObj", jsonObj.toString());
+                    Intent it = new Intent(ActResultado.this, MainActivity.class);
 
+                    try {
+                        tipo = "";
+                        jsonObj.put("tipo", tipo);
+                        jsonObj.put("avaliarColetor", "0");
+                        jsonObj.put("avaliarDoador", "0");
+                        id = jsonObj.getString("id");
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
+                            "http://172.28.144.181:5000/api/users/" + id,
+                            jsonObj,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    Toast.makeText(ActResultado.this, "Atualizando usuario -> NULL. Coleta cancelada.", Toast.LENGTH_LONG).show();
+                                }
+                            },
+
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                }
+                            }
+                    );
+                    requestQueue.add(jsonObjectRequest2);
+
+                    it.putExtra("fbJsonObj", jsonObj.toString());
                     startActivity(it);
                     // Use either finish() or return() to either close the activity or just the dialog
                     return;
@@ -75,6 +120,7 @@ public class ActResultado extends AppCompatActivity {
         mReceiver = new UpdateActResultado();
         registerReceiver(mReceiver, new IntentFilter("nrd.UpdateActResultado")); // Register receiver
 
+        requestQueue = Volley.newRequestQueue(this);
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         System.out.println("STRING NO RESULTADO ======================>   " + fbJsonObjToString);
@@ -100,6 +146,17 @@ public class ActResultado extends AppCompatActivity {
 
     }
 
+    public void onBackPressed(){
+        Intent it = new Intent(ActResultado.this, MainActivity.class);
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+            it.putExtra("fbJsonObj",jsonObj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        startActivity(it);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -121,11 +178,45 @@ public class ActResultado extends AppCompatActivity {
 
         @Override
         public void onReceive(final Context context, Intent intent) {
-            //mComando = intent.getStringExtra("comando");
-            System.out.println("Doador SAINDO DO PROGRESS DIALOG");
-            flag = true;
-            mNomeColetor = intent.getStringExtra("nomecoletor");
-            Log.d("UpdateActResultado", "COLETOR OLAOLAOLA");
+            mComando = intent.getStringExtra("comando");
+            if(mComando.equals("notfound")){
+                mProgressDialog.setTitle("Coletor não encontrado.");
+                mProgressDialog.setMessage("Tente mais tarde!");
+            }
+            else {
+                System.out.println("Doador SAINDO DO PROGRESS DIALOG");
+                flag = true;
+                mNomeColetor = intent.getStringExtra("nomecoletor");
+                idcoletor = intent.getStringExtra("idcoletor");
+
+                try {
+                    jsonObj.put("idcoletor", idcoletor );
+                    id = jsonObj.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users/" + id,
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(ActResultado.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonObjectRequest);
+
+                Log.d("UpdateActResultado", "COLETOR OLAOLAOLA");
+            }
         }
     }
 

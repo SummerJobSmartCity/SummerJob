@@ -44,22 +44,17 @@ public class ActDoador extends AppCompatActivity
         LocationListener {
 
     private Button btnSolicitar;
+    private Button btnDesistir;
     private RequestQueue requestQueue;
+    public double lat;
+    public double lng;
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
     Marker mMarkerAtual;
-
-
     JSONObject jsonObj;
     String fbJsonObjToString;
     String id;
-
-    public double lat;
-    public double lng;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +64,21 @@ public class ActDoador extends AppCompatActivity
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         System.out.println("CHECAR SE TA COM O TIPO =================== >    " + fbJsonObjToString);
+
+        btnDesistir = (Button) findViewById(R.id.btnDesistir);
+        btnDesistir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent it = new Intent(ActDoador.this, MainActivity.class);
+                try {
+                    jsonObj = new JSONObject(fbJsonObjToString);
+                    it.putExtra("fbJsonObj",jsonObj.toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                startActivity(it);
+            }
+        });
 
         btnSolicitar = (Button) findViewById(R.id.btnSolicitar);
         btnSolicitar.setOnClickListener(new View.OnClickListener() {
@@ -80,6 +90,8 @@ public class ActDoador extends AppCompatActivity
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
+                    jsonObj.put("avaliarColetor", "0");
+                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -107,6 +119,8 @@ public class ActDoador extends AppCompatActivity
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
+                    jsonObj.put("avaliarColetor", "0");
+                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -146,6 +160,46 @@ public class ActDoador extends AppCompatActivity
         SupportMapFragment mapFragment = (SupportMapFragment)
                 getSupportFragmentManager().findFragmentById(R.id.map);
         mMap = mapFragment.getMap();
+    }
+
+    public void onBackPressed(){
+        Intent it = new Intent(ActDoador.this, MainActivity.class);
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+            jsonObj.put("tipo","");
+            jsonObj.put("latitude", "");
+            jsonObj.put("longitude", "");
+            jsonObj.put("gcmToken", "");
+            jsonObj.put("avaliarColetor", "0");
+            jsonObj.put("avaliarDoador", "0");
+            id = jsonObj.getString("id");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                "http://172.28.144.181:5000/api/users/" + id,
+                jsonObj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(ActDoador.this, "", Toast.LENGTH_LONG).show();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+
+
+        requestQueue.add(jsonObjectRequest);
+
+        it.putExtra("fbJsonObj", jsonObj.toString());
+        startActivity(it);
     }
 
     @Override

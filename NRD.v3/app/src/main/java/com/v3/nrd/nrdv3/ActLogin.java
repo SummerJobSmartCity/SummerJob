@@ -5,9 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,26 +60,26 @@ public class ActLogin extends AppCompatActivity{
         info = (TextView)findViewById(R.id.info);
         callbackManager = CallbackManager.Factory.create();
 
-        final EditText edtNome = (EditText)findViewById(R.id.edtNome);
+//        final EditText edtNome = (EditText)findViewById(R.id.edtNome);
 
         loginButton = (LoginButton)findViewById(R.id.login_button);
 
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
 
-        Button btn = (Button)findViewById(R.id.button2);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(ActLogin.this,
-                        "Logado! " + edtNome.getText().toString(),
-                        Toast.LENGTH_SHORT).show();
-
-                Intent it = new Intent(ActLogin.this, MainActivity.class);
-                System.out.println("FBOBJ========>    " + fbJsonObj.toString());
-                it.putExtra("fbJsonObj", fbJsonObj.toString());
-                startActivity(it);
-            }
-        });
+//        Button btn = (Button)findViewById(R.id.button2);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(ActLogin.this,
+//                        "Logado! " + edtNome.getText().toString(),
+//                        Toast.LENGTH_SHORT).show();
+//
+//                Intent it = new Intent(ActLogin.this, MainActivity.class);
+//                System.out.println("FBOBJ========>    " + fbJsonObj.toString());
+//                it.putExtra("fbJsonObj", fbJsonObj.toString());
+//                startActivity(it);
+//            }
+//        });
 
         if (checkPlayServices()) {      //se possui Google Play Service
             Intent it = new Intent(this, RegistrationIntentService.class);
@@ -108,7 +105,11 @@ public class ActLogin extends AppCompatActivity{
                                     new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
-                                            Toast.makeText(ActLogin.this,"Enviado para o serividor.", Toast.LENGTH_LONG).show();
+                                            try {
+                                                Toast.makeText(ActLogin.this,"Seja bem vindo " + fbJsonObj.getString("name"), Toast.LENGTH_LONG).show();
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                            }
 
                                         }
                                     },
@@ -124,10 +125,10 @@ public class ActLogin extends AppCompatActivity{
 
                             user_name = object.getString("name"); //Obtendo o nome do usuario do facebook. Enviar para o servidor!
 
-                            info.setText("Login:    " + user_name);
-                            Toast.makeText(ActLogin.this,
-                                    "Seja bem-vindo  " + user_name + edtNome.getText().toString(),
-                                    Toast.LENGTH_SHORT).show();
+//                            info.setText("Login:    " + user_name);
+//                            Toast.makeText(ActLogin.this,
+//                                    "Seja bem-vindo  " + user_name + edtNome.getText().toString(),
+//                                    Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
                             e.printStackTrace();

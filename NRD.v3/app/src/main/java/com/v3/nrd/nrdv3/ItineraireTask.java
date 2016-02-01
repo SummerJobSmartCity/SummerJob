@@ -155,7 +155,7 @@ public class ItineraireTask extends AsyncTask<Void, Integer, Boolean> {
     @Override
     protected void onPostExecute(final Boolean result) {
         if(!result) {
-            Toast.makeText(context, TOAST_ERR_MAJ, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(context, TOAST_ERR_MAJ, Toast.LENGTH_SHORT).show();
         }
         else {
             //On déclare le polyline, c'est-à-dire le trait (ici bleu) que l'on ajoute sur la carte pour tracer l'itinéraire

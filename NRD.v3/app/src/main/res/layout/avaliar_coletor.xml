@@ -38,7 +38,9 @@
         android:layout_below="@+id/textView1"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="65dp"
-        android:numStars="5" />
+        android:numStars="5"
+        android:rating="1"
+        android:stepSize="1" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

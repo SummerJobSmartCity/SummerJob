@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CarroçaWay</string>
+    <string name="app_name">Coleta pra Mim!</string>
     <string name="action_settings">Settings</string>
     <string name="lbl_coletor">COLETOR</string>
     <string name="lbl_doador">DOADOR</string>
@@ -44,5 +44,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="lbl_loading">Buscando pedido</string>
+    <string name="btnDesistir">Desistir</string>
+    <string name="action_exit">Sair</string>
 
 </resources>

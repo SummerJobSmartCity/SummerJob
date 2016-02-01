@@ -54,6 +54,7 @@ public class ActPedido extends AppCompatActivity
 
     private Button btnColetaEfetuada;
     private static String mNomeDoador = "";
+    private static String iddoador = "";
     private static String mEmail = "";
     private static String mComando = "";
     private static boolean flag = false;
@@ -83,17 +84,17 @@ public class ActPedido extends AppCompatActivity
         public ProcessData(){
             mProgressDialog = new ProgressDialog(ActPedido.this);
             mProgressDialog.setTitle(getString(R.string.lbl_loading));
-            mProgressDialog.setCancelable(true);
+            mProgressDialog.setCancelable(false);
             mProgressDialog.setButton("Cancelar", new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int which) {
                     Intent it= new Intent(ActPedido.this,MainActivity.class);
-                    it.putExtra("fbJsonObj", jsonObj.toString());
 
                     try {
                         tipo = null;
                         jsonObj.put("tipo",tipo);
+                        jsonObj.put("avaliarColetor", "0");
+                        jsonObj.put("avaliarDoador", "0");
                         id = jsonObj.getString("id");
-
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -116,9 +117,9 @@ public class ActPedido extends AppCompatActivity
                     );
                     requestQueue.add(jsonObjectRequest2);
 
+                    it.putExtra("fbJsonObj", jsonObj.toString());
                     startActivity(it);
-                // Use either finish() or return() to either close the activity or just the dialog
-                return;
+                    return;
                 }
             });
         }
@@ -189,6 +190,18 @@ public class ActPedido extends AppCompatActivity
         mNomeDoadorTextView = (TextView) findViewById(R.id.nome_doador);
         mEmailDoador = (TextView) findViewById(R.id.telefone_doador);
 
+    }
+
+    public void onBackPressed(){
+        Intent it = new Intent(ActPedido.this, MainActivity.class);
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+            it.putExtra("fbJsonObj",jsonObj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        it.putExtra("fbJsonObj", jsonObj.toString());
+        startActivity(it);
     }
 
     @Override
@@ -267,7 +280,7 @@ public class ActPedido extends AppCompatActivity
 //            e.printStackTrace();
 //        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 13));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
         mMarkerAtual.setPosition(latLng);
     }
 
@@ -284,6 +297,8 @@ public class ActPedido extends AppCompatActivity
                 try {
                     jsonObj.put("latitude", lat_coletor );
                     jsonObj.put("longitude", lng_coletor );
+                    jsonObj.put("avaliarColetor", "0");
+                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
@@ -313,6 +328,36 @@ public class ActPedido extends AppCompatActivity
             else {
                 flag = true;
                 mNomeDoador = intent.getStringExtra("nomedoador");
+                iddoador = intent.getStringExtra("iddoador");
+                System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS      :       " + iddoador);
+
+                try {
+                    jsonObj.put("iddoador", iddoador );
+                    id = jsonObj.getString("id");
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users/" + id,
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                Toast.makeText(ActPedido.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonObjectRequest);
+
+
                 mEmail = intent.getStringExtra("emaildoador");
                 destino = intent.getStringExtra("latitude") + "," + intent.getStringExtra("longitude");
                 System.out.println("Destino do servidor!!!!                      " + destino);

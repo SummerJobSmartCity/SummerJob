@@ -23,6 +23,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.ConnectionResult;
@@ -65,6 +67,8 @@ public class MainActivity extends AppCompatActivity
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         token = preferences.getString("token", "");
         System.out.println("TOKEN NA MAIN!!! =============>    " + token);
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
@@ -93,6 +97,49 @@ public class MainActivity extends AppCompatActivity
                 .build();
     }
 
+    public void onBackPressed(){
+        Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_HOME);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        LoginManager.getInstance().logOut();            //logout do facebook
+
+        try {                                           //logout do servidor
+            jsonObj.put("tipo","");
+            jsonObj.put("latitude", 0);
+            jsonObj.put("longitude", 0);
+            jsonObj.put("gcmToken", "");
+            jsonObj.put("avaliarColetor", 0);
+            id = jsonObj.getString("id");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                "http://172.28.144.181:5000/api/users/" + id,
+                jsonObj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_LONG).show();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
+
+        startActivity(intent);
+        int pid = android.os.Process.myPid();
+        android.os.Process.killProcess(pid);
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -116,10 +163,47 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        int id2 = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id2 == R.id.action_exit) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            LoginManager.getInstance().logOut();            //logout do facebook
+
+            try {                                           //logout do servidor
+                jsonObj.put("tipo","");
+                jsonObj.put("latitude", 0);
+                jsonObj.put("longitude", 0);
+                jsonObj.put("gcmToken", "");
+                id = jsonObj.getString("id");
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                    "http://172.28.144.181:5000/api/users/" + id,
+                    jsonObj,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_LONG).show();
+                        }
+                    },
+
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                        }
+                    }
+            );
+            requestQueue.add(jsonObjectRequest);
+
+            startActivity(intent);
+            int pid = android.os.Process.myPid();
+            android.os.Process.killProcess(pid);
             return true;
         }
 

@@ -23,8 +23,12 @@ public class AvaliarColetor extends AppCompatActivity {
     private Button btnOk1;
     private RatingBar rating_Bar;
     private RequestQueue requestQueue;
+    private static String idcoletor = "";
+
 
     JSONObject jsonObj;
+    JSONObject jsonObj2;
+
     String fbJsonObjToString;
     String avaliarColetor;
     String id;
@@ -40,16 +44,16 @@ public class AvaliarColetor extends AppCompatActivity {
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
         System.out.println("STRING NO AVALIAR COLETOR ======================>   " + fbJsonObjToString);
 
-        listenerForRatingBar();
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
-            jsonObj.put("avaliarColetor",avaliarColetor);  //avaliação do doador para o coletor
             System.out.println("IMPRIMINDO VALOR DO AVALIARCOLETOR==========================>         " + avaliarColetor);
             id = jsonObj.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        listenerForRatingBar();
 
         btnOk1=(Button)findViewById(R.id.btnOk1);
         btnOk1.setOnClickListener(new View.OnClickListener() {
@@ -58,13 +62,19 @@ public class AvaliarColetor extends AppCompatActivity {
                 Intent it = new Intent(AvaliarColetor.this, ActDoador.class);
                 it.putExtra("fbJsonObj",jsonObj.toString());
 
+                try {
+                    idcoletor = jsonObj.getString("idcoletor");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
-                        jsonObj,
+                        "http://172.28.144.181:5000/api/avaliarColetor/" + idcoletor,
+                        jsonObj2,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(AvaliarColetor.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(AvaliarColetor.this, "Atualizando avaliação do doador", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -83,12 +93,31 @@ public class AvaliarColetor extends AppCompatActivity {
 
     }
 
+    public void onBackPressed(){
+        Intent it = new Intent(AvaliarColetor.this, MainActivity.class);
+        try {
+            jsonObj = new JSONObject(fbJsonObjToString);
+            it.putExtra("fbJsonObj",jsonObj.toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        startActivity(it);
+    }
+
     public void listenerForRatingBar(){
-        rating_Bar=(RatingBar)findViewById(R.id.ratingBar);
+        System.out.println("CHECAR ORDEM DAS COISAS |||||||||||||||||||||||||||||||||||||||||||||||||||| LISTNER FOR RATING BAR    ");
+        rating_Bar=(RatingBar)findViewById(R.id.rtAvaliação);
         rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                                                     @Override
                                                     public void onRatingChanged(RatingBar rating_Bar, float rating, boolean fromUser) {
-                                                        avaliarColetor = String.valueOf(rating_Bar.getRating());
+                                                        avaliarColetor = String.valueOf(rating);
+                                                        System.out.println("IMPRIMINDO VALOR DO AVALIARDOADOR==========================>         " + avaliarColetor);
+                                                        try {
+                                                            jsonObj2 = new JSONObject();
+                                                            jsonObj2.put("avaliarColetor", avaliarColetor);     //avaliação do coletor para o doador
+                                                        } catch (JSONException e) {
+                                                            e.printStackTrace();
+                                                        }
                                                     }
                                                 }
         );
