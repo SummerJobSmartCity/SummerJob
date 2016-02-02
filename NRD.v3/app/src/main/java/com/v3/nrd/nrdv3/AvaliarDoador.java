@@ -34,8 +34,6 @@ public class AvaliarDoador extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        System.out.println("CHECAR ORDEM DAS COISAS |||||||||||||||||||||||||||||||||||||||||||||||||||| ON CREATE    ");
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.avaliar_doador);
 
@@ -49,8 +47,6 @@ public class AvaliarDoador extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        System.out.println("CHECAR STRING NO AVALIAR DOADOR =================== >    " + fbJsonObjToString);
-
         listenerForRatingBar();
 
         btnOk1=(Button)findViewById(R.id.btnOk1);
@@ -62,6 +58,8 @@ public class AvaliarDoador extends AppCompatActivity {
 
                 try {
                     iddoador = jsonObj.getString("iddoador");
+                    jsonObj2.put("id",jsonObj.getString("id"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -86,13 +84,12 @@ public class AvaliarDoador extends AppCompatActivity {
 
 
                 startActivity(it);
+                finish();
             }
         });
     }
 
     public void onBackPressed(){
-        System.out.println("CHECAR ORDEM DAS COISAS |||||||||||||||||||||||||||||||||||||||||||||||||||| ON BACK PRESSED    ");
-
         Intent it = new Intent(AvaliarDoador.this, MainActivity.class);
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
@@ -101,11 +98,11 @@ public class AvaliarDoador extends AppCompatActivity {
             e.printStackTrace();
         }
         startActivity(it);
+        finish();
     }
 
 
     public void listenerForRatingBar(){
-        System.out.println("CHECAR ORDEM DAS COISAS |||||||||||||||||||||||||||||||||||||||||||||||||||| LISTNER FOR RATING BAR    ");
         rating_Bar=(RatingBar)findViewById(R.id.ratingBar);
         rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                                                     @Override

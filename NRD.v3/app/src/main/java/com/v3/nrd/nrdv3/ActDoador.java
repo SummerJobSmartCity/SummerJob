@@ -63,7 +63,6 @@ public class ActDoador extends AppCompatActivity
         requestQueue = Volley.newRequestQueue(this);
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
-        System.out.println("CHECAR SE TA COM O TIPO =================== >    " + fbJsonObjToString);
 
         btnDesistir = (Button) findViewById(R.id.btnDesistir);
         btnDesistir.setOnClickListener(new View.OnClickListener() {
@@ -77,6 +76,9 @@ public class ActDoador extends AppCompatActivity
                     e.printStackTrace();
                 }
                 startActivity(it);
+                finish();
+//                int pid = android.os.Process.myPid();
+//                android.os.Process.killProcess(pid);
             }
         });
 
@@ -90,8 +92,8 @@ public class ActDoador extends AppCompatActivity
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-                    jsonObj.put("avaliarColetor", "0");
-                    jsonObj.put("avaliarDoador", "0");
+//                    jsonObj.put("avaliarColetor", "0");
+//                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -103,7 +105,7 @@ public class ActDoador extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActDoador.this, "Enviado localização ao Servidor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActDoador.this, "Enviando localização ao Servidor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -119,8 +121,8 @@ public class ActDoador extends AppCompatActivity
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-                    jsonObj.put("avaliarColetor", "0");
-                    jsonObj.put("avaliarDoador", "0");
+//                    jsonObj.put("avaliarColetor", "0");
+//                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -132,7 +134,7 @@ public class ActDoador extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActDoador.this, "Enviado post ao servidor", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(ActDoador.this, "Enviado post ao servidor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -142,12 +144,13 @@ public class ActDoador extends AppCompatActivity
                             }
                         }
                 );
-                System.out.println("ENVIOU PARA O SERVIDOR O POST SOLICITANDO COLETA!!! ||||||||||\\");
-
                 requestQueue.add(jsonObjectRequest3);
 
-                it.putExtra("fbJsonObj",jsonObj.toString());
+                it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
+                finish();
+//                int pid = android.os.Process.myPid();
+//                android.os.Process.killProcess(pid);
             }
         });
 
@@ -169,9 +172,9 @@ public class ActDoador extends AppCompatActivity
             jsonObj.put("tipo","");
             jsonObj.put("latitude", "");
             jsonObj.put("longitude", "");
-            jsonObj.put("gcmToken", "");
-            jsonObj.put("avaliarColetor", "0");
-            jsonObj.put("avaliarDoador", "0");
+//            jsonObj.put("gcmToken", "");
+//            jsonObj.put("avaliarColetor", "0");
+//            jsonObj.put("avaliarDoador", "0");
             id = jsonObj.getString("id");
 
         } catch (JSONException e) {
@@ -184,7 +187,7 @@ public class ActDoador extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(ActDoador.this, "", Toast.LENGTH_LONG).show();
+                        //Toast.makeText(ActDoador.this, "", Toast.LENGTH_LONG).show();
                     }
                 },
 
@@ -194,12 +197,13 @@ public class ActDoador extends AppCompatActivity
                     }
                 }
         );
-
-
         requestQueue.add(jsonObjectRequest);
 
         it.putExtra("fbJsonObj", jsonObj.toString());
         startActivity(it);
+        finish();
+//        int pid = android.os.Process.myPid();
+//        android.os.Process.killProcess(pid);
     }
 
     @Override

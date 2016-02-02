@@ -60,26 +60,8 @@ public class ActLogin extends AppCompatActivity{
         info = (TextView)findViewById(R.id.info);
         callbackManager = CallbackManager.Factory.create();
 
-//        final EditText edtNome = (EditText)findViewById(R.id.edtNome);
-
         loginButton = (LoginButton)findViewById(R.id.login_button);
-
         loginButton.setReadPermissions(Arrays.asList("public_profile, email, user_birthday, user_friends"));
-
-//        Button btn = (Button)findViewById(R.id.button2);
-//        btn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(ActLogin.this,
-//                        "Logado! " + edtNome.getText().toString(),
-//                        Toast.LENGTH_SHORT).show();
-//
-//                Intent it = new Intent(ActLogin.this, MainActivity.class);
-//                System.out.println("FBOBJ========>    " + fbJsonObj.toString());
-//                it.putExtra("fbJsonObj", fbJsonObj.toString());
-//                startActivity(it);
-//            }
-//        });
 
         if (checkPlayServices()) {      //se possui Google Play Service
             Intent it = new Intent(this, RegistrationIntentService.class);
@@ -106,7 +88,7 @@ public class ActLogin extends AppCompatActivity{
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             try {
-                                                Toast.makeText(ActLogin.this,"Seja bem vindo " + fbJsonObj.getString("name"), Toast.LENGTH_LONG).show();
+                                                Toast.makeText(ActLogin.this,"Seja bem vindo " + fbJsonObj.getString("name") + "!", Toast.LENGTH_LONG).show();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
                                             }

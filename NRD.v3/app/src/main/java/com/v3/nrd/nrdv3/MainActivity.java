@@ -102,14 +102,14 @@ public class MainActivity extends AppCompatActivity
         intent.addCategory(Intent.CATEGORY_HOME);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        LoginManager.getInstance().logOut();            //logout do facebook
+//        LoginManager.getInstance().logOut();            //logout do facebook
 
         try {                                           //logout do servidor
             jsonObj.put("tipo","");
-            jsonObj.put("latitude", 0);
-            jsonObj.put("longitude", 0);
-            jsonObj.put("gcmToken", "");
-            jsonObj.put("avaliarColetor", 0);
+//            jsonObj.put("latitude", "0");
+//            jsonObj.put("longitude", "0");
+//            jsonObj.put("gcmToken", "");
+//            jsonObj.put("avaliarColetor", "0");
             id = jsonObj.getString("id");
 
         } catch (JSONException e) {
@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Toast.makeText(MainActivity.this, "Exit", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MainActivity.this, "Logout efetuado", Toast.LENGTH_LONG).show();
                     }
                 },
 
@@ -135,8 +135,9 @@ public class MainActivity extends AppCompatActivity
         requestQueue.add(jsonObjectRequest);
 
         startActivity(intent);
-        int pid = android.os.Process.myPid();
-        android.os.Process.killProcess(pid);
+//        finish();
+//        int pid = android.os.Process.myPid();
+//        android.os.Process.killProcess(pid);
     }
 
 
@@ -202,8 +203,9 @@ public class MainActivity extends AppCompatActivity
             requestQueue.add(jsonObjectRequest);
 
             startActivity(intent);
-            int pid = android.os.Process.myPid();
-            android.os.Process.killProcess(pid);
+            finish();
+//            int pid = android.os.Process.myPid();
+//            android.os.Process.killProcess(pid);
             return true;
         }
 
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(MainActivity.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
+//                                Toast.makeText(MainActivity.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -292,6 +294,7 @@ public class MainActivity extends AppCompatActivity
                 requestQueue.add(jsonObjectRequest);
                 it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
+                finish();
                 break;
             case R.id.btnDoador:
                 Intent it2 = new Intent(this, ActDoador.class);
@@ -315,7 +318,7 @@ public class MainActivity extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(MainActivity.this, "Atualizando usuario -> doador", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Obtendo sua localização", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -328,6 +331,7 @@ public class MainActivity extends AppCompatActivity
                 requestQueue.add(jsonObjectRequest2);
                 it2.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it2);
+                finish();
                 break;
         }
     }

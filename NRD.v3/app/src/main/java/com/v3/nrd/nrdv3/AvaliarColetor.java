@@ -42,12 +42,9 @@ public class AvaliarColetor extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
-        System.out.println("STRING NO AVALIAR COLETOR ======================>   " + fbJsonObjToString);
-
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
-            System.out.println("IMPRIMINDO VALOR DO AVALIARCOLETOR==========================>         " + avaliarColetor);
             id = jsonObj.getString("id");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -88,6 +85,7 @@ public class AvaliarColetor extends AppCompatActivity {
 
 
                 startActivity(it);
+                finish();
             }
         });
 
@@ -102,10 +100,10 @@ public class AvaliarColetor extends AppCompatActivity {
             e.printStackTrace();
         }
         startActivity(it);
+        finish();
     }
 
     public void listenerForRatingBar(){
-        System.out.println("CHECAR ORDEM DAS COISAS |||||||||||||||||||||||||||||||||||||||||||||||||||| LISTNER FOR RATING BAR    ");
         rating_Bar=(RatingBar)findViewById(R.id.rtAvaliação);
         rating_Bar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                                                     @Override

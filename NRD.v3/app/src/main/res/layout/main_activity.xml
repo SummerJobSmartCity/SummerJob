@@ -21,17 +21,16 @@
         android:text="@string/lbl_coletor"
         android:id="@+id/btnColetor"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="79dp"
         android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="76dp" />
+        android:layout_centerHorizontal="true" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lbl_doador"
         android:id="@+id/btnDoador"
+        android:layout_marginBottom="71dp"
         android:layout_above="@+id/textView"
-        android:layout_alignLeft="@+id/btnColetor"
-        android:layout_alignStart="@+id/btnColetor"
-        android:layout_marginBottom="87dp" />
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

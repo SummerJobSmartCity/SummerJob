@@ -4,7 +4,6 @@ package com.v3.nrd.nrdv3;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -64,7 +63,7 @@ public class ItineraireTask extends AsyncTask<Void, Integer, Boolean> {
      */
     @Override
     protected void onPreExecute() {
-        Toast.makeText(context, TOAST_MSG, Toast.LENGTH_LONG).show();
+//        Toast.makeText(context, TOAST_MSG, Toast.LENGTH_LONG).show();
     }
 
     /***

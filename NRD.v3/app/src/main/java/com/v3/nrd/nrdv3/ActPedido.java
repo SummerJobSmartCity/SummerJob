@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -92,8 +91,8 @@ public class ActPedido extends AppCompatActivity
                     try {
                         tipo = null;
                         jsonObj.put("tipo",tipo);
-                        jsonObj.put("avaliarColetor", "0");
-                        jsonObj.put("avaliarDoador", "0");
+//                        jsonObj.put("avaliarColetor", "0");
+//                        jsonObj.put("avaliarDoador", "0");
                         id = jsonObj.getString("id");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -105,7 +104,7 @@ public class ActPedido extends AppCompatActivity
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    Toast.makeText(ActPedido.this, "Atualizando usuario -> doador", Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(ActPedido.this, "Atualizando usuario -> doador", Toast.LENGTH_LONG).show();
                                 }
                             },
 
@@ -119,6 +118,9 @@ public class ActPedido extends AppCompatActivity
 
                     it.putExtra("fbJsonObj", jsonObj.toString());
                     startActivity(it);
+                    finish();
+//                    int pid = android.os.Process.myPid();
+//                    android.os.Process.killProcess(pid);
                     return;
                 }
             });
@@ -174,6 +176,7 @@ public class ActPedido extends AppCompatActivity
                 Intent it = new Intent(ActPedido.this, AvaliarDoador.class);
                 it.putExtra("fbJsonObj", jsonObj.toString());
                 startActivity(it);
+                finish();
             }
         });
 
@@ -202,6 +205,9 @@ public class ActPedido extends AppCompatActivity
         }
         it.putExtra("fbJsonObj", jsonObj.toString());
         startActivity(it);
+        finish();
+//        int pid = android.os.Process.myPid();
+//        android.os.Process.killProcess(pid);
     }
 
     @Override
@@ -243,7 +249,7 @@ public class ActPedido extends AppCompatActivity
         BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
         mMarkerAtual = mMap.addMarker(
                 new MarkerOptions().title("Local atual").icon(icon).position(
-                        new LatLng(lastKnownLocation.getLatitude(),lastKnownLocation.getLongitude()))
+                        new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
         );
 
         lat_coletor = lastKnownLocation.getLatitude();
@@ -252,7 +258,6 @@ public class ActPedido extends AppCompatActivity
 
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
 
-        System.out.println("VAI CHAMAR ITINERAIRETASK olha o destino      :       " + destino);
         new ItineraireTask(this, mMap, origem, destino).execute();
     }
 
@@ -280,7 +285,7 @@ public class ActPedido extends AppCompatActivity
 //            e.printStackTrace();
 //        }
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20));
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
         mMarkerAtual.setPosition(latLng);
     }
 
@@ -289,7 +294,6 @@ public class ActPedido extends AppCompatActivity
         public void onReceive(final Context context, Intent intent) {
             mComando = intent.getStringExtra("comando");
 
-            Log.d("UpdateActPedido", "ENTROU");
             if(mComando.equals("update")){
                 lat_coletor = lastKnownLocation.getLatitude();
                 lng_coletor = lastKnownLocation.getLongitude();
@@ -297,8 +301,8 @@ public class ActPedido extends AppCompatActivity
                 try {
                     jsonObj.put("latitude", lat_coletor );
                     jsonObj.put("longitude", lng_coletor );
-                    jsonObj.put("avaliarColetor", "0");
-                    jsonObj.put("avaliarDoador", "0");
+//                    jsonObj.put("avaliarColetor", "0");
+//                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
@@ -311,7 +315,7 @@ public class ActPedido extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActPedido.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActPedido.this, "Pedido de coleta encontrado", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -322,14 +326,14 @@ public class ActPedido extends AppCompatActivity
                         }
                 );
                 requestQueue.add(jsonObjectRequest);
-
-                Log.d("UpdateActPedido", "UPDATE SAIU");
             }
-            else {
+            else{
                 flag = true;
                 mNomeDoador = intent.getStringExtra("nomedoador");
                 iddoador = intent.getStringExtra("iddoador");
-                System.out.println("SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS      :       " + iddoador);
+                mEmail = intent.getStringExtra("emaildoador");
+                destino = intent.getStringExtra("latitude") + "," + intent.getStringExtra("longitude");
+
 
                 try {
                     jsonObj.put("iddoador", iddoador );
@@ -345,7 +349,7 @@ public class ActPedido extends AppCompatActivity
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActPedido.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActPedido.this, "Obtendo dados do Doador", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -356,15 +360,7 @@ public class ActPedido extends AppCompatActivity
                         }
                 );
                 requestQueue.add(jsonObjectRequest);
-
-
-                mEmail = intent.getStringExtra("emaildoador");
-                destino = intent.getStringExtra("latitude") + "," + intent.getStringExtra("longitude");
-                System.out.println("Destino do servidor!!!!                      " + destino);
                 createLocationRequest();
-
-                // mTelefoneDoador=intent.getStringExtra("telefonedoador");
-                Log.d("UpdateActPedido", "DOADOR DADASDASDASDAS");
             }
         }
     }

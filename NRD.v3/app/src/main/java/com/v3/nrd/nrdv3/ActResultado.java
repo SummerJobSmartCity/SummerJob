@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -42,9 +41,11 @@ public class ActResultado extends AppCompatActivity {
     UpdateActResultado mReceiver;
     private static boolean flag = false;
     private TextView mNomeColetorTextView;
+    private TextView emailColetorTextView;
+
     ProgressDialog mProgressDialog;
     private static String mComando = "";
-
+    private static String emailColetor = "";
 
     public class ProcessDataResultado extends AsyncTask<Void, Void, Void> {
 
@@ -59,8 +60,8 @@ public class ActResultado extends AppCompatActivity {
                     try {
                         tipo = "";
                         jsonObj.put("tipo", tipo);
-                        jsonObj.put("avaliarColetor", "0");
-                        jsonObj.put("avaliarDoador", "0");
+//                        jsonObj.put("avaliarColetor", "0");
+//                        jsonObj.put("avaliarDoador", "0");
                         id = jsonObj.getString("id");
 
                     } catch (JSONException e) {
@@ -73,7 +74,7 @@ public class ActResultado extends AppCompatActivity {
                             new Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
-                                    Toast.makeText(ActResultado.this, "Atualizando usuario -> NULL. Coleta cancelada.", Toast.LENGTH_LONG).show();
+//                                    Toast.makeText(ActResultado.this, "Atualizando usuario -> NULL. Coleta cancelada.", Toast.LENGTH_LONG).show();
                                 }
                             },
 
@@ -87,6 +88,9 @@ public class ActResultado extends AppCompatActivity {
 
                     it.putExtra("fbJsonObj", jsonObj.toString());
                     startActivity(it);
+                    finish();
+//                    int pid = android.os.Process.myPid();
+//                    android.os.Process.killProcess(pid);
                     // Use either finish() or return() to either close the activity or just the dialog
                     return;
                 }
@@ -109,6 +113,7 @@ public class ActResultado extends AppCompatActivity {
             flag = false;
             mProgressDialog.dismiss();
             mNomeColetorTextView.setText(mNomeColetor);
+            emailColetorTextView.setText(emailColetor);
         }
     }
 
@@ -119,11 +124,8 @@ public class ActResultado extends AppCompatActivity {
 
         mReceiver = new UpdateActResultado();
         registerReceiver(mReceiver, new IntentFilter("nrd.UpdateActResultado")); // Register receiver
-
         requestQueue = Volley.newRequestQueue(this);
-
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
-        System.out.println("STRING NO RESULTADO ======================>   " + fbJsonObjToString);
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
@@ -139,10 +141,13 @@ public class ActResultado extends AppCompatActivity {
                 Intent it = new Intent(ActResultado.this, AvaliarColetor.class);
                 it.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it);
+                finish();
             }
         });
 
         mNomeColetorTextView = (TextView) findViewById(R.id.nome_coletor);
+        emailColetorTextView = (TextView) findViewById(R.id.telefone_coletor);
+
 
     }
 
@@ -150,11 +155,43 @@ public class ActResultado extends AppCompatActivity {
         Intent it = new Intent(ActResultado.this, MainActivity.class);
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
-            it.putExtra("fbJsonObj",jsonObj.toString());
+            jsonObj.put("tipo","");
+            jsonObj.put("latitude", "");
+            jsonObj.put("longitude", "");
+//            jsonObj.put("gcmToken", "");
+//            jsonObj.put("avaliarColetor", "0");
+//            jsonObj.put("avaliarDoador", "0");
+            id = jsonObj.getString("id");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                "http://172.28.144.181:5000/api/users/" + id,
+                jsonObj,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Toast.makeText(ActDoador.this, "", Toast.LENGTH_LONG).show();
+                    }
+                },
+
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        );
+
+
+        requestQueue.add(jsonObjectRequest);
+
+        it.putExtra("fbJsonObj", jsonObj.toString());
         startActivity(it);
+        finish();
+//        int pid = android.os.Process.myPid();
+//        android.os.Process.killProcess(pid);
     }
 
     @Override
@@ -183,11 +220,11 @@ public class ActResultado extends AppCompatActivity {
                 mProgressDialog.setTitle("Coletor não encontrado.");
                 mProgressDialog.setMessage("Tente mais tarde!");
             }
-            else {
-                System.out.println("Doador SAINDO DO PROGRESS DIALOG");
+            else{
                 flag = true;
                 mNomeColetor = intent.getStringExtra("nomecoletor");
                 idcoletor = intent.getStringExtra("idcoletor");
+                emailColetor = intent.getStringExtra("emailcoletor");
 
                 try {
                     jsonObj.put("idcoletor", idcoletor );
@@ -203,7 +240,7 @@ public class ActResultado extends AppCompatActivity {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(ActResultado.this, "Atualizando posição -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(ActResultado.this, "Coletor encontrado. Aguarde.", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -214,8 +251,6 @@ public class ActResultado extends AppCompatActivity {
                         }
                 );
                 requestQueue.add(jsonObjectRequest);
-
-                Log.d("UpdateActResultado", "COLETOR OLAOLAOLA");
             }
         }
     }

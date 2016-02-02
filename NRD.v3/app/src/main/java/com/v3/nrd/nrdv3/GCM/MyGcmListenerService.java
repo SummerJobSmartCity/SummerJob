@@ -20,6 +20,7 @@ public class MyGcmListenerService extends GcmListenerService {
         String comando      = data.getString("comando");
         String nomeDoador   = data.getString("nomedoador");
         String emaildoador  = data.getString("emaildoador");
+        String emailcoletor = data.getString("emailcoletor");
         String nomeColetor  = data.getString("nomecoletor");
         String latitude     = data.getString("latitude");
         String longitude    = data.getString("longitude");
@@ -52,9 +53,9 @@ public class MyGcmListenerService extends GcmListenerService {
 
         it2.putExtra("nomecoletor", nomeColetor);
         it2.putExtra("comando"      , comando);
+        it2.putExtra("emailcoletor"  , emailcoletor);
 
-
-        System.out.println("COMANDO        DOADOR NO MYGCM ==========================>>                 " + comando);
+        System.out.println("COMANDO   DOADOR NO MYGCM ==========================>>                 " + comando);
         System.out.println("ID        DOADOR NO MYGCM ==========================>>                 " + iddoador);
         System.out.println("ID        COLETOR NO MYGCM ==========================>>                 " + idcoletor);
 
