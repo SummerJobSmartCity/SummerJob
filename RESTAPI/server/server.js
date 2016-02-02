@@ -20,7 +20,7 @@ function findColetor(doador,users){
 	var len = users.length;
 	var i = 0;
 	while(i < len){
-		if( (date.getTime() - users[i].updated.getTime()) < 120000 ){
+		if( ((date.getTime() - users[i].updated.getTime()) < 120000 )&&(users[i].estado !== "ocupado")){
 			coletor = users[i];
 			distanciaMin = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[i].latitude), parseFloat(users[i].longitude));
 			i = len;
@@ -29,7 +29,7 @@ function findColetor(doador,users){
 	}
 	if(coletor !== null){
 		for(i = 0, len = users.length; i < len; i++){
-			if( (date.getTime() - users[i].updated.getTime()) < 300000 ){
+			if( ((date.getTime() - users[i].updated.getTime()) < 120000 )&&(users[i].estado !== "ocupado") ){
 				distancia = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[i].latitude), parseFloat(users[i].longitude));
 				if(distancia < distanciaMin){
 					distanciaMin = distancia;
@@ -37,7 +37,30 @@ function findColetor(doador,users){
 				}
 			}
 		}
+
+											Users.findOne({"id" : coletor.id}, function(err, user) {
+													if (err)
+															res.send(err);
+													else{
+														user.estado = "ocupado";
+														console.log(user.estado);
+														user.updated = new Date();
+													// update the user info
+												// save the user
+												}
+													console.log(user.estado);
+													user.save(function(err) {
+															if (err)
+																	res.send(err);
+															console.log("SETANDO ESTADO");
+															res.json({ message: 'User updated!' });
+													});
+													console.log(user.estado);
+											});
+											console.log("3" + coletor.estado);
+
 	}
+
   return coletor;
 }
 
@@ -117,6 +140,7 @@ router.route('/users')
 					user.avaliarColetor = "0";
 					user.iddoador = "";
 					user.idcoletor = "";
+					user.estado = "";
 					user.save(function(err){
 						if(err){
 							res.send("Deu errado!");
@@ -140,7 +164,7 @@ router.route('/users')
 router.route('/postColeta')
 	.post(function(req,res){
 
-
+		console.log("aaaaaaaaaaaaaaaaaaaaaaa");
 		var coletorEscolhido = new Users();
 		var userArray;
 		var coletor = new Users();
@@ -221,6 +245,7 @@ router.route('/postColeta')
 								else{
 									console.log("ACHOU UM COLETOR");
 									console.log(JSON.stringify(coletorEscolhido));
+
 									var dist = 0;
 									dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
 									////////PRIMEIRO O DOADOR VAI SABER QUEM EH O COLETOR
@@ -265,9 +290,7 @@ router.route('/postColeta')
 										latitude : doador.latitude,
 										longitude : doador.longitude
 									};
-									console.log("PALHACOOOOO"+doador.id);
-									console.log(doador.id);
-									console.log(doador.id);
+
 									messageColetor.addData(payloadColetor);
 									var tokenColetor = coletorEscolhido.gcmToken;
 									//////////////////////////
@@ -314,7 +337,7 @@ router.route('/users/:id')
 								// user.email = req.body.email;
 								// user.link = req.body.link;
 								// user.name = req.body.name;
-								console.log("CACHORRO" + req.body.tipo);
+
 								user.tipo = req.body.tipo;
 								user.gcmToken = req.body.gcmToken;
 								user.latitude = req.body.latitude;
@@ -330,13 +353,17 @@ router.route('/users/:id')
 								var pao = req.body.avaliarDoador;
 								if(pao == undefined){ pao = "0"}
 								var numD = parseFloat(user.avaliarDoador) + parseFloat(pao);
-								console.log("ARROZ" + req.body.avaliarDoador);
+
 								user.avaliarDoador = numD.toString();
 								var pao = req.body.avaliarColetor;
 								if(pao == undefined){ pao = "0"}
 								var numC = parseFloat(user.avaliarColetor) + parseFloat(pao);
 								user.avaliarColetor = numC.toString();
 								user.updated = new Date();
+
+								var pao = req.body.estado;
+								if(pao == undefined){ pao = ""}
+								user.estado = pao;
 						  // update the user info
 						// save the user
 
@@ -359,11 +386,10 @@ router.route('/avaliarDoador/:id')
 						if (err)
 								res.send(err);
 						else{
-							console.log("PATOOOOOOO" + req.body.tipo);
 							var pao = req.body.avaliarDoador;
 							if(pao == undefined){ pao = "0"}
 							var numD = parseFloat(user.avaliarDoador) + parseFloat(pao);
-							console.log("ARROZ" + req.body.avaliarDoador);
+
 							user.avaliarDoador = numD.toString();
 							user.updated = new Date();
 					  // update the user info
@@ -372,9 +398,28 @@ router.route('/avaliarDoador/:id')
 						user.save(function(err) {
 								if (err)
 										res.send(err);
-								res.json({ message: 'User updated!' });
+								// res.json({ message: 'User updated!' });
 						});
 				});
+
+				Users.findOne({"id" : req.body.id}, function(err, user) {
+						if (err)
+								res.send(err);
+						else{
+							user.estado = "";
+							console.log("ME ATUALIZANDO");
+							user.updated = new Date();
+					  // update the user info
+					// save the user
+					}
+						user.save(function(err) {
+								if (err)
+										res.send(err);
+								// res.json({ message: 'User updated!' });
+						});
+				});
+
+
 	 });
 ///////////////////////////
 
@@ -392,7 +437,7 @@ router.route('/avaliarColetor/:id')
 								var pao = req.body.avaliarColetor;
 								if(pao == undefined){ pao = "0"}
 								var numC = parseFloat(user.avaliarColetor) + parseFloat(pao);
-								console.log("ARROZ" + req.body.avaliarColetor);
+
 								user.avaliarColetor = numC.toString();
 								user.updated = new Date();
 						  // update the user info
@@ -411,34 +456,34 @@ router.route('/avaliarColetor/:id')
 
 
 //Achar o Coletor mais proximo dado um Doador
-router.route('/findColetor')
-//funções da rota
-//função post
-	.post( function(req,res){
-		var doador = new Users();
-		doador = req.body;
-		doador.updated = new Date();
-		Users.find( { "tipo" : "coletor" }, function(err, users) {
-				if (err)
-					res.send(err);
-				else{
-					// coletor = users[0];
-					// distanciaMin = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[0].latitude), parseFloat(users[0].longitude));
-					// for(i = 0, len = users.length; i < len; i++){
-					// 	distancia = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[i].latitude), parseFloat(users[i].longitude));
-					// 	if(distancia < distanciaMin){
-					// 		distanciaMin = distancia;
-					// 	 	coletor = users[i];
-					// 	}
-					// }
-					// res.json(coletor);
-          res.json(findColetor(doador,users));
-				}
-
-		});
-
-	}
-  );
+// router.route('/findColetor')
+// //funções da rota
+// //função post
+// 	.post( function(req,res){
+// 		var doador = new Users();
+// 		doador = req.body;
+// 		doador.updated = new Date();
+// 		Users.find( { "tipo" : "coletor" }, function(err, users) {
+// 				if (err)
+// 					res.send(err);
+// 				else{
+// 					// coletor = users[0];
+// 					// distanciaMin = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[0].latitude), parseFloat(users[0].longitude));
+// 					// for(i = 0, len = users.length; i < len; i++){
+// 					// 	distancia = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(users[i].latitude), parseFloat(users[i].longitude));
+// 					// 	if(distancia < distanciaMin){
+// 					// 		distanciaMin = distancia;
+// 					// 	 	coletor = users[i];
+// 					// 	}
+// 					// }
+// 					// res.json(coletor);
+//           res.json(findColetor(doador,users));
+// 				}
+//
+// 		});
+//
+// 	}
+//   );
 
 
 

@@ -18,6 +18,7 @@ var UserSchema = mongoose.Schema({
 	avaliarColetor : String,
 	iddoador : String,
 	idcoletor : String,
+	estado : String,
 	updated: {type: Date, default: Date.now}
 
 });
