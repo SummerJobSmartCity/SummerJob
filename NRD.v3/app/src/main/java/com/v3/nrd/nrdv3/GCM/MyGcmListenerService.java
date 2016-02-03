@@ -6,10 +6,6 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GcmListenerService;
 
-
-/**
- * Created by cesar on 27/01/16.
- */
 public class MyGcmListenerService extends GcmListenerService {
     public static final String TAG = "LOG";
     public static final int CONSTANTE_ACT_PEDIDO = 1;
@@ -35,29 +31,40 @@ public class MyGcmListenerService extends GcmListenerService {
 
 
         Log.i(TAG, comando);
-        it.putExtra("comando", comando);
+        it.putExtra("comando"       , comando);
         it.putExtra("nomedoador"    , nomeDoador);
         it.putExtra("emaildoador"   , emaildoador);
         it.putExtra("latitude"      , latitude);
         it.putExtra("longitude"     , longitude);
-
-        it.putExtra("iddoador"     , iddoador);
-        it2.putExtra("iddoador"     , iddoador);
-        it3.putExtra("iddoador"     , iddoador);
-
         it.putExtra("idcoletor"     , idcoletor);
-        it2.putExtra("idcoletor"     , idcoletor);
-        it3.putExtra("idcoletor"     , idcoletor);
+        it.putExtra("iddoador"      , iddoador);
+        it.putExtra("nomecoletor"   , nomeColetor);
+        it.putExtra("emailcoletor"  , emailcoletor);
 
-
-
-        it2.putExtra("nomecoletor", nomeColetor);
         it2.putExtra("comando"      , comando);
-        it2.putExtra("emailcoletor"  , emailcoletor);
+        it2.putExtra("nomedoador"   , nomeDoador);
+        it2.putExtra("emaildoador"  , emaildoador);
+        it2.putExtra("latitude"     , latitude);
+        it2.putExtra("longitude"    , longitude);
+        it2.putExtra("iddoador"     , iddoador);
+        it2.putExtra("idcoletor"    , idcoletor);
+        it2.putExtra("nomecoletor"  , nomeColetor);
+        it2.putExtra("emailcoletor" , emailcoletor);
+
+
+        it3.putExtra("comando"      , comando);
+        it3.putExtra("nomedoador"   , nomeDoador);
+        it3.putExtra("emaildoador"  , emaildoador);
+        it3.putExtra("latitude"     , latitude);
+        it3.putExtra("longitude"    , longitude);
+        it3.putExtra("idcoletor"    , idcoletor);
+        it3.putExtra("iddoador"     , iddoador);
+        it3.putExtra("nomecoletor"  , nomeColetor);
+        it3.putExtra("emailcoletor" , emailcoletor);
 
         System.out.println("COMANDO   DOADOR NO MYGCM ==========================>>                 " + comando);
         System.out.println("ID        DOADOR NO MYGCM ==========================>>                 " + iddoador);
-        System.out.println("ID        COLETOR NO MYGCM ==========================>>                 " + idcoletor);
+        System.out.println("ID        COLETOR NO MYGCM ==========================>>                " + idcoletor);
 
         sendBroadcast(it);
         sendBroadcast(it2);

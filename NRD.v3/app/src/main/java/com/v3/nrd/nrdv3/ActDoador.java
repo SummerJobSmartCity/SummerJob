@@ -11,8 +11,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -62,6 +62,8 @@ public class ActDoador extends AppCompatActivity
         setContentView(R.layout.act_doador);
         requestQueue = Volley.newRequestQueue(this);
 
+
+
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
 
         btnDesistir = (Button) findViewById(R.id.btnDesistir);
@@ -88,41 +90,37 @@ public class ActDoador extends AppCompatActivity
             public void onClick(View v) {
                 Intent it = new Intent(ActDoador.this, ActResultado.class);
 
-                try {
-                    jsonObj = new JSONObject(fbJsonObjToString);
-                    jsonObj.put("latitude", lat );
-                    jsonObj.put("longitude", lng );
-//                    jsonObj.put("avaliarColetor", "0");
-//                    jsonObj.put("avaliarDoador", "0");
-                    id = jsonObj.getString("id");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
-                        jsonObj,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                Toast.makeText(ActDoador.this, "Enviando localização ao Servidor", Toast.LENGTH_LONG).show();
-                            }
-                        },
-
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                            }
-                        }
-                );
-                requestQueue.add(jsonObjectRequest2);
+//                try {
+//                    jsonObj = new JSONObject(fbJsonObjToString);
+//                    jsonObj.put("latitude", lat );
+//                    jsonObj.put("longitude", lng );
+//                    id = jsonObj.getString("id");
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
+//                        "http://172.28.144.181:5000/api/users/" + id,
+//                        jsonObj,
+//                        new Response.Listener<JSONObject>() {
+//                            @Override
+//                            public void onResponse(JSONObject response) {
+//                                Toast.makeText(ActDoador.this, "Enviando localização ao Servidor", Toast.LENGTH_LONG).show();
+//                            }
+//                        },
+//
+//                        new Response.ErrorListener() {
+//                            @Override
+//                            public void onErrorResponse(VolleyError error) {
+//                            }
+//                        }
+//                );
+//                requestQueue.add(jsonObjectRequest2);
 
                 try {
                     jsonObj = new JSONObject(fbJsonObjToString);
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
-//                    jsonObj.put("avaliarColetor", "0");
-//                    jsonObj.put("avaliarDoador", "0");
                     id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -144,6 +142,7 @@ public class ActDoador extends AppCompatActivity
                             }
                         }
                 );
+                jsonObjectRequest3.setRetryPolicy(new DefaultRetryPolicy(20*1000,0,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 requestQueue.add(jsonObjectRequest3);
 
                 it.putExtra("fbJsonObj", jsonObj.toString());

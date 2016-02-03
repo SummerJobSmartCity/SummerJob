@@ -1,11 +1,14 @@
 package com.v3.nrd.nrdv3;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -30,7 +33,13 @@ public class AvaliarDoador extends AppCompatActivity {
     String avaliarDoador;
     private RatingBar rating_Bar;
     private RequestQueue requestQueue;
+    private static String mNomeDoador = "";
     private static String iddoador = "";
+    private static String mEmail = "";
+    private static String mComando = "";
+
+    private TextView mNomeDoadorTextView;
+    private TextView mEmailDoador;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +67,7 @@ public class AvaliarDoador extends AppCompatActivity {
 
                 try {
                     iddoador = jsonObj.getString("iddoador");
-                    jsonObj2.put("id",jsonObj.getString("id"));
+                    jsonObj2.put("id", jsonObj.getString("id"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -87,9 +96,27 @@ public class AvaliarDoador extends AppCompatActivity {
                 finish();
             }
         });
+
+        mNomeDoadorTextView = (TextView) findViewById(R.id.nome_doador);
+        mEmailDoador = (TextView) findViewById(R.id.telefone_doador);
+
     }
 
-    public void onBackPressed(){
+    public class UpdateActPedido extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            mComando = intent.getStringExtra("comando");
+            if(mComando.equals("doadorEscolhido")){
+                mNomeDoador = intent.getStringExtra("nomedoador");
+                mEmail = intent.getStringExtra("emaildoador");
+
+                mNomeDoadorTextView.setText(mNomeDoador);
+                mEmailDoador.setText(mEmail);
+            }
+        }
+    }
+
+   public void onBackPressed(){
         Intent it = new Intent(AvaliarDoador.this, MainActivity.class);
         try {
             jsonObj = new JSONObject(fbJsonObjToString);

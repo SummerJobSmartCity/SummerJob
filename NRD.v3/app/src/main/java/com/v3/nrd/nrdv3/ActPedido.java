@@ -91,8 +91,6 @@ public class ActPedido extends AppCompatActivity
                     try {
                         tipo = null;
                         jsonObj.put("tipo",tipo);
-//                        jsonObj.put("avaliarColetor", "0");
-//                        jsonObj.put("avaliarDoador", "0");
                         id = jsonObj.getString("id");
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -119,8 +117,6 @@ public class ActPedido extends AppCompatActivity
                     it.putExtra("fbJsonObj", jsonObj.toString());
                     startActivity(it);
                     finish();
-//                    int pid = android.os.Process.myPid();
-//                    android.os.Process.killProcess(pid);
                     return;
                 }
             });
@@ -155,7 +151,6 @@ public class ActPedido extends AppCompatActivity
         setContentView(R.layout.act_pedido);
 
         requestQueue = Volley.newRequestQueue(this);
-
 
         mReceiver = new UpdateActPedido();
         registerReceiver(mReceiver, new IntentFilter("nrd.UpdateActPedido")); // Register receiver
@@ -206,8 +201,6 @@ public class ActPedido extends AppCompatActivity
         it.putExtra("fbJsonObj", jsonObj.toString());
         startActivity(it);
         finish();
-//        int pid = android.os.Process.myPid();
-//        android.os.Process.killProcess(pid);
     }
 
     @Override

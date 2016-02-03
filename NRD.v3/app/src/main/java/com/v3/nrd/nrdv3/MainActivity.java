@@ -106,10 +106,6 @@ public class MainActivity extends AppCompatActivity
 
         try {                                           //logout do servidor
             jsonObj.put("tipo","");
-//            jsonObj.put("latitude", "0");
-//            jsonObj.put("longitude", "0");
-//            jsonObj.put("gcmToken", "");
-//            jsonObj.put("avaliarColetor", "0");
             id = jsonObj.getString("id");
 
         } catch (JSONException e) {
@@ -136,8 +132,7 @@ public class MainActivity extends AppCompatActivity
 
         startActivity(intent);
 //        finish();
-//        int pid = android.os.Process.myPid();
-//        android.os.Process.killProcess(pid);
+
     }
 
 
@@ -175,9 +170,6 @@ public class MainActivity extends AppCompatActivity
 
             try {                                           //logout do servidor
                 jsonObj.put("tipo","");
-                jsonObj.put("latitude", 0);
-                jsonObj.put("longitude", 0);
-                jsonObj.put("gcmToken", "");
                 id = jsonObj.getString("id");
 
             } catch (JSONException e) {
@@ -204,8 +196,6 @@ public class MainActivity extends AppCompatActivity
 
             startActivity(intent);
             finish();
-//            int pid = android.os.Process.myPid();
-//            android.os.Process.killProcess(pid);
             return true;
         }
 
@@ -269,6 +259,7 @@ public class MainActivity extends AppCompatActivity
                     jsonObj.put("latitude", lat );
                     jsonObj.put("longitude", lng );
                     jsonObj.put("gcmToken", token);
+                    jsonObj.put("estado", "livre");
                     id = jsonObj.getString("id");
 
                 } catch (JSONException e) {
