@@ -37,28 +37,6 @@ function findColetor(doador,users){
 				}
 			}
 		}
-
-											Users.findOne({"id" : coletor.id}, function(err, user) {
-													if (err)
-															res.send(err);
-													else{
-														user.estado = "ocupado";
-														console.log(user.estado);
-														user.updated = new Date();
-													// update the user info
-												// save the user
-												}
-													console.log(user.estado);
-													user.save(function(err) {
-															if (err)
-																	res.send(err);
-															console.log("SETANDO ESTADO");
-															res.json({ message: 'User updated!' });
-													});
-													console.log(user.estado);
-											});
-											console.log("3" + coletor.estado);
-
 	}
 
   return coletor;
@@ -140,7 +118,7 @@ router.route('/users')
 					user.avaliarColetor = "0";
 					user.iddoador = "";
 					user.idcoletor = "";
-					user.estado = "";
+					user.estado = "livre";
 					user.save(function(err){
 						if(err){
 							res.send("Deu errado!");
@@ -164,7 +142,7 @@ router.route('/users')
 router.route('/postColeta')
 	.post(function(req,res){
 
-		console.log("aaaaaaaaaaaaaaaaaaaaaaa");
+		console.log("FAZENDO PEDIDO DE COLETA");
 		var coletorEscolhido = new Users();
 		var userArray;
 		var coletor = new Users();
@@ -193,7 +171,7 @@ router.route('/postColeta')
 					userArray = users;
 					for(i=0, len = users.length; i < len ; i++ ){
 						coletor = users[i];
-						console.log(JSON.stringify(coletor));
+						// console.log(JSON.stringify(coletor));
 		// 				if( (date.getTime() - coletor.updated.getTime()) > 15000 ){  //15 seg so pra testar. Tem q ser mais!
 							var token = coletor.gcmToken;
 		// 	//Token eh unico de cada aparelho PARA COLETORES dzPJe6-oc-s:APA91bHXNF0f-QCjus6AXXmBobLtKBJgx6zz3Ddux2QAxMQwGThv7CMT5Mce3ZlZPQSLVn-nAh9NEDW41EgfaRXh5c2Aua1EkYZDiFgmILwt4jmEvXYB7WUVuDXQ-64teyyYgoxPolAW
@@ -222,6 +200,7 @@ router.route('/postColeta')
 
 								if(coletorEscolhido.name === undefined){
 									console.log("NAO ACHOU UM COLETOR");
+									// res.send({comando : "notfound"});
 									var senderDoadorNope = new gcm.Sender(api_key);
 									var messageDoadorNope = new gcm.Message({  contentAvailable : true });
 									var payloadDoadorNope = {
@@ -244,7 +223,39 @@ router.route('/postColeta')
 								}
 								else{
 									console.log("ACHOU UM COLETOR");
-									console.log(JSON.stringify(coletorEscolhido));
+									// coletorEscolhido.estado = "ocupado";
+
+									Users.findOne({"id" : coletorEscolhido.id}, function(err, user) {
+											if (err){}
+													// res.send(err);
+											else{
+												user.estado = "ocupado";
+												console.log(user.estado);
+												user.updated = new Date();
+											// update the user info
+										// save the user
+										}
+											console.log(user.estado);
+											user.save(function(err) {
+													if (err){
+														res.send(err);
+													}
+													else{
+														console.log("SETANDO ESTADO");
+														res.json({ message: 'User updated!' });
+													}
+											});
+											console.log(user.estado);
+											coletorEscolhido = user;
+									});
+									console.log("BATATA " + coletorEscolhido.estado);
+
+
+
+
+
+
+									console.log("COLETOR FOI ESCOLHIDO AGORA"+ coletorEscolhido.name);
 
 									var dist = 0;
 									dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
@@ -308,6 +319,7 @@ router.route('/postColeta')
 
 								}
 							}
+
 						},10000);
 
 
@@ -337,33 +349,34 @@ router.route('/users/:id')
 								// user.email = req.body.email;
 								// user.link = req.body.link;
 								// user.name = req.body.name;
-
-								user.tipo = req.body.tipo;
+								var pao = req.body.tipo;
+								if(pao == undefined){ pao = "";}
+								user.tipo = pao;
 								user.gcmToken = req.body.gcmToken;
 								user.latitude = req.body.latitude;
 								user.longitude = req.body.longitude;
 								var pao = req.body.iddoador;
-								if(pao == undefined){ pao = ""}
+								if(pao == undefined){ pao = "";}
 								user.iddoador = pao;
 
 								var pao = req.body.idcoletor;
-								if(pao == undefined){ pao = ""}
+								if(pao == undefined){ pao = "";}
 								user.idcoletor = pao;
 
 								var pao = req.body.avaliarDoador;
-								if(pao == undefined){ pao = "0"}
+								if(pao == undefined){ pao = "0";}
 								var numD = parseFloat(user.avaliarDoador) + parseFloat(pao);
 
 								user.avaliarDoador = numD.toString();
 								var pao = req.body.avaliarColetor;
-								if(pao == undefined){ pao = "0"}
+								if(pao == undefined){ pao = "0";}
 								var numC = parseFloat(user.avaliarColetor) + parseFloat(pao);
 								user.avaliarColetor = numC.toString();
 								user.updated = new Date();
 
-								var pao = req.body.estado;
-								if(pao == undefined){ pao = ""}
-								user.estado = pao;
+								// var pao = req.body.estado;
+								// if(pao == undefined){ pao = "livre";}
+								// user.estado = pao;
 						  // update the user info
 						// save the user
 
@@ -389,7 +402,7 @@ router.route('/avaliarDoador/:id')
 							var pao = req.body.avaliarDoador;
 							if(pao == undefined){ pao = "0"}
 							var numD = parseFloat(user.avaliarDoador) + parseFloat(pao);
-
+							console.log("AVALIAÇAO DO DOADOR");
 							user.avaliarDoador = numD.toString();
 							user.updated = new Date();
 					  // update the user info
@@ -406,8 +419,9 @@ router.route('/avaliarDoador/:id')
 						if (err)
 								res.send(err);
 						else{
-							user.estado = "";
-							console.log("ME ATUALIZANDO");
+							console.log(JSON.stringify(user));
+							user.estado = "livre";
+							console.log("ATUALIZANDO o estado do coletor");
 							user.updated = new Date();
 					  // update the user info
 					// save the user
@@ -415,7 +429,7 @@ router.route('/avaliarDoador/:id')
 						user.save(function(err) {
 								if (err)
 										res.send(err);
-								// res.json({ message: 'User updated!' });
+								res.json({ message: 'User updated!' });
 						});
 				});
 
@@ -437,7 +451,7 @@ router.route('/avaliarColetor/:id')
 								var pao = req.body.avaliarColetor;
 								if(pao == undefined){ pao = "0"}
 								var numC = parseFloat(user.avaliarColetor) + parseFloat(pao);
-
+								console.log("AVALIAÇAO DO COLETOR");
 								user.avaliarColetor = numC.toString();
 								user.updated = new Date();
 						  // update the user info
