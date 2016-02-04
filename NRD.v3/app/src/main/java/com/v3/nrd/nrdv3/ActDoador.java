@@ -55,6 +55,8 @@ public class ActDoador extends AppCompatActivity
     JSONObject jsonObj;
     String fbJsonObjToString;
     String id;
+    Location lastKnownLocation;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,19 +235,13 @@ public class ActDoador extends AppCompatActivity
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        Location lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-        mMarkerAtual = mMap.addMarker(
-                new MarkerOptions().title("Local atual").icon(icon).position(
-                        new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
-        );
+        lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
 
         lat = lastKnownLocation.getLatitude();
         lng = lastKnownLocation.getLongitude();
 
 
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                mGoogleApiClient, mLocationRequest, this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     @Override
@@ -266,7 +262,17 @@ public class ActDoador extends AppCompatActivity
     @Override
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
-        mMarkerAtual.setPosition(latLng);
+        if(mMarkerAtual == null){
+            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            mMarkerAtual = mMap.addMarker(
+                    new MarkerOptions().title("Local atual").icon(icon).position(
+                            new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+            );
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+
+        }else {
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 17));
+            mMarkerAtual.setPosition(latLng);
+        }
     }
 }

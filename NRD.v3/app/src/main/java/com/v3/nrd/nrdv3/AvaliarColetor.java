@@ -82,7 +82,7 @@ public class AvaliarColetor extends AppCompatActivity {
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-                                Toast.makeText(AvaliarColetor.this, "Atualizando avaliação do doador", Toast.LENGTH_LONG).show();
+                                Toast.makeText(AvaliarColetor.this, "Atualizando avaliação do Coletor", Toast.LENGTH_LONG).show();
                             }
                         },
 

@@ -242,11 +242,13 @@ public class ActPedido extends AppCompatActivity
             return;
         }
         lastKnownLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
-        mMarkerAtual = mMap.addMarker(
-                new MarkerOptions().title("Local atual").icon(icon).position(
-                        new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
-        );
+//        BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+//        mMarkerAtual = mMap.addMarker(
+//                new MarkerOptions().title("Local atual").icon(icon).position(
+//                        new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+//        );
+        System.out.println("Adicionando MARKER               CREATE LOCATION REQUESTE");
+
 
         lat_coletor = lastKnownLocation.getLatitude();
         lng_coletor = lastKnownLocation.getLongitude();
@@ -280,9 +282,19 @@ public class ActPedido extends AppCompatActivity
 //        } catch (JSONException e) {
 //            e.printStackTrace();
 //        }
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
-        mMarkerAtual.setPosition(latLng);
+
+        if(mMarkerAtual == null){
+            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            mMarkerAtual = mMap.addMarker(
+                    new MarkerOptions().title("Local atual").icon(icon).position(
+                            new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
+            );
+        }else {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 18));
+            mMarkerAtual.setPosition(latLng);
+            System.out.println("Adicionando MARKER               LOCATION CHANGE");
+        }
     }
 
     public class UpdateActPedido extends BroadcastReceiver {

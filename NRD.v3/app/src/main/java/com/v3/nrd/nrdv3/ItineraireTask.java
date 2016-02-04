@@ -169,7 +169,7 @@ public class ItineraireTask extends AsyncTask<Void, Integer, Boolean> {
             //On déclare un marker vert que l'on placera sur le départ
             final MarkerOptions markerA = new MarkerOptions();
             markerA.position(lstLatLng.get(0));
-            markerA.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+            //markerA.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
             //On déclare un marker rouge que l'on mettra sur l'arrivée
             final MarkerOptions markerB = new MarkerOptions();
