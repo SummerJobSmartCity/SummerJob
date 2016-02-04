@@ -1,7 +1,5 @@
 package com.v3.nrd.nrdv3;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,8 +23,12 @@ public class AvaliarDoador extends AppCompatActivity {
 
     private Button btnOk1;
     String fbJsonObjToString;
+    String fbJsonObjToStringDados;
+
     JSONObject jsonObj;
     JSONObject jsonObj2;
+    JSONObject jsonObjDados;
+
 
     String id;
 
@@ -41,17 +43,23 @@ public class AvaliarDoador extends AppCompatActivity {
     private TextView mNomeDoadorTextView;
     private TextView mEmailDoador;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.avaliar_doador);
 
-       requestQueue = Volley.newRequestQueue(this);
-
+        requestQueue = Volley.newRequestQueue(this);
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+        fbJsonObjToStringDados = getIntent().getStringExtra("jsonObjDados");
+
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
+
+            jsonObjDados = new JSONObject(fbJsonObjToStringDados);
+            mNomeDoador = jsonObjDados.getString("nomeDoador");
+            mEmail = jsonObjDados.getString("emailDoador");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -97,23 +105,12 @@ public class AvaliarDoador extends AppCompatActivity {
             }
         });
 
-        mNomeDoadorTextView = (TextView) findViewById(R.id.nome_doador);
-        mEmailDoador = (TextView) findViewById(R.id.telefone_doador);
+        mNomeDoadorTextView = (TextView) findViewById(R.id.textView10);
+        mEmailDoador = (TextView) findViewById(R.id.textView12);
 
-    }
+        mNomeDoadorTextView.setText(mNomeDoador);
+        mEmailDoador.setText(mEmail);
 
-    public class UpdateActPedido extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            mComando = intent.getStringExtra("comando");
-            if(mComando.equals("doadorEscolhido")){
-                mNomeDoador = intent.getStringExtra("nomedoador");
-                mEmail = intent.getStringExtra("emaildoador");
-
-                mNomeDoadorTextView.setText(mNomeDoador);
-                mEmailDoador.setText(mEmail);
-            }
-        }
     }
 
    public void onBackPressed(){

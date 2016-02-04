@@ -12,10 +12,10 @@
     <string name="btnOk">Ok</string>
     <string name="btnRecusar">Recusar</string>
     <string name="btnAceitar">Aceitar</string>
-    <string name="txt_d.doador">Dados do doador</string>
+    <string name="txt_d.doador">Dados do Doador:</string>
     <string name="btnColetaEfetudada">Coleta efetuada</string>
     <string name="txtAcaminho">Estou a caminho!</string>
-    <string name="txt_d.coletor">Dados do coletor</string>
+    <string name="txt_d.coletor">Avalie o Coletor:</string>
 
     <string name="lbl_nome">nome:</string>
     <string name="lbl_telefone">telefone:</string>
@@ -46,5 +46,7 @@
     <string name="lbl_loading">Buscando pedido</string>
     <string name="btnDesistir">Desistir</string>
     <string name="action_exit">Sair</string>
+    <string name="txt_coletor">Coletor escolhido:</string>
+    <string name="txt_doador_avalie">Avalie o Doador:</string>
 
 </resources>

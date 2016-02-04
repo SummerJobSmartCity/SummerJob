@@ -28,9 +28,9 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="@string/txtAcaminho"
         android:id="@+id/textView6"
-        android:layout_below="@+id/textView7"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="72dp" />
+        android:layout_marginBottom="42dp"
+        android:layout_above="@+id/btnColetaEfetuada"
+        android:layout_centerHorizontal="true" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/txt_d.coletor"
+        android:text="@string/txt_coletor"
         android:id="@+id/textView7"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
@@ -54,7 +54,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_nomecoletor"
         android:id="@+id/nome_coletor"
-        android:layout_below="@+id/textView7"
+        android:layout_above="@+id/telefone_coletor"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -63,7 +63,8 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_telefonedocoletor"
         android:id="@+id/telefone_coletor"
-        android:layout_below="@+id/nome_coletor"
+        android:layout_marginBottom="33dp"
+        android:layout_above="@+id/textView6"
         android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

@@ -70,6 +70,7 @@ public class ActPedido extends AppCompatActivity
     GoogleMap mMap;
     Marker mMarkerAtual;
     JSONObject jsonObj;
+    JSONObject jsonObjDados;
     String fbJsonObjToString;
     String id;
     String tipo;
@@ -160,6 +161,7 @@ public class ActPedido extends AppCompatActivity
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
+            jsonObjDados = new JSONObject();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -170,6 +172,7 @@ public class ActPedido extends AppCompatActivity
             public void onClick(View v) {
                 Intent it = new Intent(ActPedido.this, AvaliarDoador.class);
                 it.putExtra("fbJsonObj", jsonObj.toString());
+                it.putExtra("jsonObjDados",jsonObjDados.toString());
                 startActivity(it);
                 finish();
             }
@@ -331,6 +334,9 @@ public class ActPedido extends AppCompatActivity
                 try {
                     jsonObj.put("iddoador", iddoador );
                     id = jsonObj.getString("id");
+
+                    jsonObjDados.put("nomeDoador", mNomeDoador);
+                    jsonObjDados.put("emailDoador", mEmail);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

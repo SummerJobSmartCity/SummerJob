@@ -31,6 +31,8 @@ public class ActResultado extends AppCompatActivity {
 
     String fbJsonObjToString;
     JSONObject jsonObj;
+    JSONObject jsonObjDados;
+
 
     String id;
     String tipo;
@@ -129,6 +131,7 @@ public class ActResultado extends AppCompatActivity {
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
+            jsonObjDados = new JSONObject();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -140,6 +143,7 @@ public class ActResultado extends AppCompatActivity {
             public void onClick(View v) {
                 Intent it = new Intent(ActResultado.this, AvaliarColetor.class);
                 it.putExtra("fbJsonObj",jsonObj.toString());
+                it.putExtra("jsonObjDados",jsonObjDados.toString());
                 startActivity(it);
                 finish();
             }
@@ -227,6 +231,9 @@ public class ActResultado extends AppCompatActivity {
                 try {
                     jsonObj.put("idcoletor", idcoletor );
                     id = jsonObj.getString("id");
+
+                    jsonObjDados.put("nomeColetor", mNomeColetor);
+                    jsonObjDados.put("emailColetor", emailColetor);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

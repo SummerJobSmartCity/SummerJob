@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -24,12 +25,17 @@ public class AvaliarColetor extends AppCompatActivity {
     private RatingBar rating_Bar;
     private RequestQueue requestQueue;
     private static String idcoletor = "";
-
+    private TextView mNomeColetorTextView;
+    private TextView emailColetorTextView;
+    private static String mNomeColetor = "";
+    private static String emailColetor = "";
 
     JSONObject jsonObj;
     JSONObject jsonObj2;
+    JSONObject jsonObjDados;
 
     String fbJsonObjToString;
+    String fbJsonObjToStringDados;
     String avaliarColetor;
     String id;
 
@@ -42,10 +48,15 @@ public class AvaliarColetor extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
 
         fbJsonObjToString = getIntent().getStringExtra("fbJsonObj");
+        fbJsonObjToStringDados = getIntent().getStringExtra("jsonObjDados");
 
         try {
             jsonObj = new JSONObject(fbJsonObjToString);
             id = jsonObj.getString("id");
+
+            jsonObjDados = new JSONObject(fbJsonObjToStringDados);
+            mNomeColetor = jsonObjDados.getString("nomeColetor");
+            emailColetor = jsonObjDados.getString("emailColetor");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -57,7 +68,7 @@ public class AvaliarColetor extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent it = new Intent(AvaliarColetor.this, ActDoador.class);
-                it.putExtra("fbJsonObj",jsonObj.toString());
+                it.putExtra("fbJsonObj", jsonObj.toString());
 
                 try {
                     idcoletor = jsonObj.getString("idcoletor");
@@ -88,6 +99,12 @@ public class AvaliarColetor extends AppCompatActivity {
                 finish();
             }
         });
+
+        mNomeColetorTextView = (TextView) findViewById(R.id.textView10);
+        emailColetorTextView = (TextView) findViewById(R.id.textView12);
+
+        mNomeColetorTextView.setText(mNomeColetor);
+        emailColetorTextView.setText(emailColetor);
 
     }
 
