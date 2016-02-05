@@ -13,6 +13,13 @@
 
     <uses-library android:name="com.google.android.maps" />
 
+    <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -104,7 +111,15 @@
             android:exported="false" >
             <!--processar as mensagens que serão recebidas.-->
         </service>
+        <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
+        <activity
+            android:name="com.v3.nrd.nrdv3.Bluetooth.DeviceList">
+        </activity>
+        <activity
+            android:name="com.v3.nrd.nrdv3.Bluetooth.Dados">
+        </activity>
+        <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
     </application>
 

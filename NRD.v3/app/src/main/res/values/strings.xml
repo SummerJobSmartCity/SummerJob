@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Coleta pra Mim!</string>
     <string name="action_settings">Settings</string>
-    <string name="lbl_coletor">COLETOR</string>
-    <string name="lbl_doador">DOADOR</string>
-    <string name="lbl_ou">ou</string>
+    <string name="lbl_coletor">Coletar</string>
+    <string name="lbl_doador">Doar</string>
+    <string name="lbl_ou">Você quer </string>
     <string name="lbl_Face">Cadastro com Facebook</string>
     <string name="lbl_pedir">Solicitar carroceiro</string>
     <string name="ldl_confirme">Confirme a localização da coleta</string>
@@ -48,5 +48,19 @@
     <string name="action_exit">Sair</string>
     <string name="txt_coletor">Coletor escolhido:</string>
     <string name="txt_doador_avalie">Avalie o Doador:</string>
+
+    <string name="action_dados">Dados</string>
+    <string name="txt_dispositivos">Dispositivos Vinculados</string>
+    <string name="btn_dispositivos">Dispositivos Vinculados</string>
+    <string name="txt_temperatura">Temperatura:</string>
+    <string name="lbl_temperatura" />
+    <string name="txt_luminosidade">Luminosidade</string>
+    <string name="lbl_luminosidade" />
+    <string name="txt_indiceUV">Índice UV:</string>
+    <string name="lbl_indiceUV" />
+    <string name="txt_qualidadedoAr">Qualidade do ar:</string>
+    <string name="lbl_qualidadedoAr" />
+    <string name="btn_Conectar">Conectar Bluetooth</string>
+
 
 </resources>
