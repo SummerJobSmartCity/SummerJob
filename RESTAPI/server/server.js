@@ -125,11 +125,13 @@ router.route('/users')
 						}
 						else{
 							contador++;
+							console.log("Adicionando" + user.name);
 							res.json({message : "" + contador + " Usuarios adicionado!!!!"});
 						}
 					});
 				}
 				else{
+					console.log("Adicionando " + req.body.name);
 					res.json({message : "Usuario ja EXISTE!!!"});
 				}
 			}
