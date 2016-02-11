@@ -88,6 +88,7 @@ public class ActLogin extends AppCompatActivity{
                                         @Override
                                         public void onResponse(JSONObject response) {
                                             try {
+                                                System.out.println("OLHA O TESTEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE = = = = = = = = = = ");
                                                 Toast.makeText(ActLogin.this,"Seja bem vindo " + fbJsonObj.getString("name") + "!", Toast.LENGTH_LONG).show();
                                             } catch (JSONException e) {
                                                 e.printStackTrace();

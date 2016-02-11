@@ -114,9 +114,6 @@
         <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
 
         <activity
-            android:name="com.v3.nrd.nrdv3.Bluetooth.DeviceList">
-        </activity>
-        <activity
             android:name="com.v3.nrd.nrdv3.Bluetooth.Dados">
         </activity>
         <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->

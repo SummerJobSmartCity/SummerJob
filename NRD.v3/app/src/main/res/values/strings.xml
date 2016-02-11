@@ -61,6 +61,7 @@
     <string name="txt_qualidadedoAr">Qualidade do ar:</string>
     <string name="lbl_qualidadedoAr" />
     <string name="btn_Conectar">Conectar Bluetooth</string>
+    <string name="txt_dados">DADOS</string>
 
 
 </resources>

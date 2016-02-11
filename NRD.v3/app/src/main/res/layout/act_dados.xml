@@ -13,88 +13,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="34dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/txt_temperatura"
-        android:id="@+id/txt_temperatura"
-        android:layout_marginTop="152dp"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/btnOk"
-        android:layout_toStartOf="@+id/btnOk" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/lbl_temperatura"
-        android:id="@+id/lbl_temperatura"
-        android:layout_alignTop="@+id/txt_temperatura"
-        android:layout_toRightOf="@+id/txt_temperatura"
-        android:layout_toEndOf="@+id/txt_temperatura" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/txt_luminosidade"
-        android:id="@+id/txt_luminosidade"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/txt_temperatura"
-        android:layout_alignStart="@+id/txt_temperatura"
-        android:layout_marginTop="61dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/lbl_luminosidade"
-        android:id="@+id/textView4"
-        android:layout_alignTop="@+id/txt_luminosidade"
-        android:layout_toRightOf="@+id/txt_temperatura"
-        android:layout_toEndOf="@+id/txt_temperatura" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/txt_indiceUV"
-        android:id="@+id/txt_indiceUV"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/lbl_temperatura"
-        android:layout_toStartOf="@+id/lbl_temperatura" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/lbl_indiceUV"
-        android:id="@+id/lbl_indiceUV"
-        android:layout_alignBottom="@+id/txt_indiceUV"
-        android:layout_toRightOf="@+id/txt_indiceUV"
-        android:layout_toEndOf="@+id/txt_indiceUV" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/txt_qualidadedoAr"
-        android:id="@+id/txt_qualidadedoAr"
-        android:layout_marginTop="63dp"
-        android:layout_below="@+id/txt_indiceUV"
-        android:layout_toLeftOf="@+id/lbl_indiceUV"
-        android:layout_toStartOf="@+id/lbl_indiceUV" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/lbl_qualidadedoAr"
-        android:id="@+id/lbl_qualidadedoAr"
-        android:layout_alignBottom="@+id/txt_qualidadedoAr"
-        android:layout_toRightOf="@+id/txt_qualidadedoAr"
-        android:layout_toEndOf="@+id/txt_qualidadedoAr" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -102,6 +20,13 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_Conectar"
         android:id="@+id/open"
-        android:layout_above="@+id/textView4"
         android:layout_centerHorizontal="true" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/txt_dados"
+        android:id="@+id/txt_dados"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

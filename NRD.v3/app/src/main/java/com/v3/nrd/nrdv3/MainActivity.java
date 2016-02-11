@@ -32,6 +32,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.v3.nrd.nrdv3.Bluetooth.Dados;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -197,6 +198,11 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
             finish();
             return true;
+        }
+        if (id2 == R.id.action_dados) {
+            Intent it3 = new Intent(this, Dados.class);
+            it3.putExtra("fbJsonObj",jsonObj.toString());
+            startActivity(it3);
         }
 
         return super.onOptionsItemSelected(item);
