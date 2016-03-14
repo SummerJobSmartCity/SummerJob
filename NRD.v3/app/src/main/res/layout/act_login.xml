@@ -8,16 +8,17 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="ngvl.android.aulasummerjob.Tela2Activity">
+    tools:context="ngvl.android.aulasummerjob.Tela2Activity"
+    android:background="@mipmap/bg_common">
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="113dp" />
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/info"
+        android:layout_centerHorizontal="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,19 +26,16 @@
         android:id="@+id/info"
         android:textSize="18sp"
         android:text="Reduzir, Reutilizar e Reciclar."
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="22dp" />
+        android:layout_marginTop="93dp"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true" />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/logo_splash"
+        android:layout_marginTop="50dp"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/login_button"
-        android:layout_alignRight="@+id/login_button"
-        android:layout_alignEnd="@+id/login_button"
-        android:layout_alignLeft="@+id/login_button"
-        android:layout_alignStart="@+id/login_button" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>
