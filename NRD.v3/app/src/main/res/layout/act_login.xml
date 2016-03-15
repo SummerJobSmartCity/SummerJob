@@ -26,7 +26,7 @@
         android:id="@+id/info"
         android:textSize="18sp"
         android:text="Reduzir, Reutilizar e Reciclar."
-        android:layout_marginTop="93dp"
+        android:layout_marginTop="138dp"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true" />
     <ImageView
@@ -34,7 +34,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@mipmap/logo_splash"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="89dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 

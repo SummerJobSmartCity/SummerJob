@@ -28,8 +28,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignRight="@+id/map2"
         android:layout_alignEnd="@+id/map2"
-        android:layout_above="@+id/map2"
-        android:layout_toEndOf="@+id/textView1" />
+        android:layout_toEndOf="@+id/textView1"
+        android:layout_above="@+id/map2" />
 
 
     <fragment
@@ -68,7 +68,8 @@
         android:layout_height="wrap_content"
         android:text="@string/btnColetaEfetudada"
         android:id="@+id/btnColetaEfetuada"
-        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="44dp"
+        android:layout_alignBottom="@+id/map2"
         android:layout_centerHorizontal="true" />
 
 
