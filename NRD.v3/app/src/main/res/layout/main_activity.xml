@@ -18,7 +18,7 @@
         android:layout_gravity="center_horizontal"
         android:background="@mipmap/bt_coletar"
         android:textColor="#ffffff"
-        android:textAlignment="textStart"
+        android:textAlignment="center"
         android:textSize="@dimen/abc_action_bar_content_inset_material"
         android:layout_marginTop="24dp"
         android:layout_below="@+id/btnDoador"
@@ -32,12 +32,12 @@
         android:id="@+id/btnDoador"
         android:background="@mipmap/bt_doar"
         android:textColor="#ffffff"
-        android:textAlignment="textStart"
-        android:textSize="@dimen/abc_dialog_padding_top_material"
-        android:textStyle="italic"
+        android:textAlignment="center"
+        android:textSize="@dimen/abc_action_bar_content_inset_material"
         android:layout_marginTop="44dp"
         android:layout_below="@+id/textView2"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:nestedScrollingEnabled="false" />
 
     <TextView
         android:layout_width="wrap_content"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Coleta pra Mim!</string>
+    <string name="app_name">Recicla pra Mim!</string>
     <string name="action_settings">Settings</string>
     <string name="lbl_coletor">Coletar</string>
     <string name="lbl_doador">Doar</string>

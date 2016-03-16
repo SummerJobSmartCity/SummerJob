@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_common">
 
     <Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btnOk"
+        android:text="Voltar"
         android:id="@+id/btnOk"
+        android:layout_marginBottom="70dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="34dp" />
+        android:background="@mipmap/bt_map_coletar" />
 
 
     <Button
@@ -20,13 +21,17 @@
         android:layout_height="wrap_content"
         android:text="@string/btn_Conectar"
         android:id="@+id/open"
-        android:layout_centerHorizontal="true" />
+        android:layout_above="@+id/btnOk"
+        android:background="@mipmap/bt_map_doar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/txt_dados"
         android:id="@+id/txt_dados"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="117dp" />
 </RelativeLayout>

@@ -75,10 +75,33 @@ public class ActDoador extends AppCompatActivity
                 Intent it = new Intent(ActDoador.this, MainActivity.class);
                 try {
                     jsonObj = new JSONObject(fbJsonObjToString);
-                    it.putExtra("fbJsonObj",jsonObj.toString());
+                    jsonObj.put("tipo","");
+                    jsonObj.put("latitude", "");
+                    jsonObj.put("longitude", "");
+                    id = jsonObj.getString("id");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
+                        "http://172.28.144.181:5000/api/users/" + id,
+                        jsonObj,
+                        new Response.Listener<JSONObject>() {
+                            @Override
+                            public void onResponse(JSONObject response) {
+                                //Toast.makeText(ActDoador.this, "", Toast.LENGTH_LONG).show();
+                            }
+                        },
+
+                        new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+                            }
+                        }
+                );
+                requestQueue.add(jsonObjectRequest);
+
+                it.putExtra("fbJsonObj",jsonObj.toString());
                 startActivity(it);
                 finish();
 //                int pid = android.os.Process.myPid();
@@ -173,9 +196,6 @@ public class ActDoador extends AppCompatActivity
             jsonObj.put("tipo","");
             jsonObj.put("latitude", "");
             jsonObj.put("longitude", "");
-//            jsonObj.put("gcmToken", "");
-//            jsonObj.put("avaliarColetor", "0");
-//            jsonObj.put("avaliarDoador", "0");
             id = jsonObj.getString("id");
 
         } catch (JSONException e) {
@@ -263,7 +283,7 @@ public class ActDoador extends AppCompatActivity
     public void onLocationChanged(Location location) {
         LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
         if(mMarkerAtual == null){
-            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pin);
             mMarkerAtual = mMap.addMarker(
                     new MarkerOptions().title("Local atual").icon(icon).position(
                             new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))

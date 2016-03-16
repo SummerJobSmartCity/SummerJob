@@ -8,7 +8,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.v3.nrd.nrdv3.ActPedido"
-    android:id="@+id/imFotododoador">
+    android:id="@+id/imFotododoador"
+    android:background="@mipmap/bg_common">
 
     <TextView
         android:layout_width="wrap_content"
@@ -16,20 +17,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_d.doador"
         android:id="@+id/textView1"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
-        android:src="@mipmap/ic_launcher"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/map2"
-        android:layout_alignEnd="@+id/map2"
-        android:layout_toEndOf="@+id/textView1"
-        android:layout_above="@+id/map2" />
+        android:layout_above="@+id/nome_doador"
+        android:layout_alignLeft="@+id/nome_doador"
+        android:layout_alignStart="@+id/nome_doador" />
 
 
     <fragment
@@ -37,9 +27,9 @@
         android:id="@+id/map2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@+id/telefone_doador" />
+        android:layout_above="@+id/textView1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -47,11 +37,9 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_nomedoador"
         android:id="@+id/nome_doador"
-        android:layout_below="@+id/textView1"
+        android:layout_above="@+id/telefone_doador"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/imageView"
-        android:layout_toStartOf="@+id/imageView" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -59,7 +47,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="@string/txt_telefonedodoador"
         android:id="@+id/telefone_doador"
-        android:layout_below="@+id/nome_doador"
+        android:layout_above="@+id/btnColetaEfetuada"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
@@ -68,9 +56,13 @@
         android:layout_height="wrap_content"
         android:text="@string/btnColetaEfetudada"
         android:id="@+id/btnColetaEfetuada"
-        android:layout_marginBottom="44dp"
-        android:layout_alignBottom="@+id/map2"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginBottom="34dp"
+        android:layout_alignParentBottom="true"
+        android:background="@mipmap/bt_map_coletar"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/map2"
+        android:layout_alignEnd="@+id/map2" />
 
 
 </RelativeLayout>

@@ -7,7 +7,8 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".Layout.ActDoador">
+    tools:context=".Layout.ActDoador"
+    android:background="@mipmap/bg_common">
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,10 +25,12 @@
         android:layout_height="wrap_content"
         android:text="@string/lbl_pedir"
         android:id="@+id/btnSolicitar"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="41dp" />
+        android:background="@mipmap/bt_map_doar"
+        android:layout_above="@+id/btnDesistir"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/map"
+        android:layout_alignEnd="@+id/map" />
 
     <fragment
         android:id="@+id/map"
@@ -45,10 +48,12 @@
         android:layout_height="wrap_content"
         android:text="@string/btnDesistir"
         android:id="@+id/btnDesistir"
-        android:layout_below="@+id/map"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="52dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/btnSolicitar"
-        android:layout_toStartOf="@+id/btnSolicitar" />
+        android:background="@mipmap/bt_map_coletar"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

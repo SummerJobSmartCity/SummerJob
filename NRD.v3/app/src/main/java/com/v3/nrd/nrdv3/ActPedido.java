@@ -284,7 +284,7 @@ public class ActPedido extends AppCompatActivity
 //        }
 
         if(mMarkerAtual == null){
-            BitmapDescriptor icon = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN);
+            BitmapDescriptor icon = BitmapDescriptorFactory.fromResource(R.mipmap.pin);
             mMarkerAtual = mMap.addMarker(
                     new MarkerOptions().title("Local atual").icon(icon).position(
                             new LatLng(lastKnownLocation.getLatitude(), lastKnownLocation.getLongitude()))
