@@ -48,8 +48,6 @@ router.route('/users/:id')
 	.post(urf.getUserId);
 
 router.route('/avaliarDoador/:id')
-	//funções da rota
-	//função get
 	.post(urf.avaliarDoadorPost);
 
 router.route('/avaliarColetor/:id')
@@ -57,10 +55,8 @@ router.route('/avaliarColetor/:id')
 
 //Achar o Coletor mais proximo dado um Doador
 router.route('/findColetor')
-//funções da rota
-//função post
 	.post(urf.findColetorPost);
-	
+
 app.listen(app.get('port'), function() {
 	console.log("rodando na porta " + app.get('port'));
 });

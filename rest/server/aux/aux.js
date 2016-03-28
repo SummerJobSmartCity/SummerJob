@@ -1,6 +1,7 @@
+	var User = require('../models/users');
 	var findColetor = function(doador, coletores) {
 
-		var data = new Date();
+		var date = new Date();
 		var coletor = new User();
 		var distancia = 0;
 		var distanciaMin = 0;
@@ -12,7 +13,7 @@
 		}
 		if (coletor !== null) {
 			for (var i = 0; i < coletores.length; i++) {
-				if ((date.getTime() - coletores.updated.getTime() < 120000) && (coletores[i].estado !== "ocupado")) {
+					if ((date.getTime() - coletores[i].updated.getTime() < 120000) && (coletores[i].estado !== "ocupado")) {
 					distancia = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletores[i].latitude), parseFloat(coletores[i].longitude));
 					if (distancia < distanciaMin) {
 						distanciaMin = distancia;

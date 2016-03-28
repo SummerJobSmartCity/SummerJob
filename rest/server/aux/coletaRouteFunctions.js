@@ -1,7 +1,8 @@
 var User = require('../models/users');
+var gcm = require('node-gcm');
+var aux = require('./aux');
 
 var postColeta = function(req, res) {
-
 	console.log("FAZENDO PEDIDO DE COLETA");
 	var coletorEscolhido = new User();
 	var userArray;
@@ -18,25 +19,28 @@ var postColeta = function(req, res) {
 		latitude: doador.latitude,
 		longitude: doador.longitude
 	};
-	//   //sender = API_KEY é unico do aplicativo
+
+	//sender = API_KEY é unico do aplicativo
 	var sender = new gcm.Sender(api_key);
+	// cria uma mensagem gcm
 
 	var message = new gcm.Message({
 		contentAvailable: true
 	});
+
 	message.addData(payload);
 
 	User.find({
 		"tipo": "coletor"
 	}, function(err, users) {
-		if (err)
+		if (err){
 			res.send(err);
-		else {
+		}else {
 			userArray = users;
 			for (i = 0, len = users.length; i < len; i++) {
 				coletor = users[i];
 				// console.log(JSON.stringify(coletor));
-				// 				if( (date.getTime() - coletor.updated.getTime()) > 15000 ){  //15 seg so pra testar. Tem q ser mais!
+				// if( (date.getTime() - coletor.updated.getTime()) > 15000 ){  //15 seg so pra testar. Tem q ser mais!
 				var token = coletor.gcmToken;
 				// 	//Token eh unico de cada aparelho PARA COLETORES dzPJe6-oc-s:APA91bHXNF0f-QCjus6AXXmBobLtKBJgx6zz3Ddux2QAxMQwGThv7CMT5Mce3ZlZPQSLVn-nAh9NEDW41EgfaRXh5c2Aua1EkYZDiFgmILwt4jmEvXYB7WUVuDXQ-64teyyYgoxPolAW
 				sender.send(message, token, function(err, result) {
@@ -53,7 +57,7 @@ var postColeta = function(req, res) {
 			}
 
 			setTimeout(function() {
-				coletorEscolhido = findColetor(doador, userArray);
+				coletorEscolhido = aux.findColetor(doador, userArray);
 
 				User.findOne({
 					"id": doador.id
@@ -124,7 +128,7 @@ var postColeta = function(req, res) {
 						console.log("COLETOR FOI ESCOLHIDO AGORA" + coletorEscolhido.name);
 
 						var dist = 0;
-						dist = getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
+						dist = aux.getDistanceFromLatLonInKm(parseFloat(doador.latitude), parseFloat(doador.longitude), parseFloat(coletorEscolhido.latitude), parseFloat(coletorEscolhido.longitude));
 						////////PRIMEIRO O DOADOR VAI SABER QUEM EH O COLETOR
 
 						var senderDoador = new gcm.Sender(api_key);
