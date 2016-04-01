@@ -48,6 +48,9 @@ public class ActLogin extends AppCompatActivity{
     private JSONObject fbJsonObj = new JSONObject();
     private GoogleApiClient client;
 
+    public String ip = "172.28.145.152";
+
+
     String user_name;
 
     @Override
@@ -83,7 +86,7 @@ public class ActLogin extends AppCompatActivity{
                         fbJsonObj = response.getJSONObject();
 
                         try {
-                            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://172.28.144.181:5000/api/users", fbJsonObj,
+                            final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, "http://"+ip+":5000/api/users", fbJsonObj,
                                     new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {

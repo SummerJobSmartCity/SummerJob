@@ -39,6 +39,8 @@ public class AvaliarDoador extends AppCompatActivity {
     private static String iddoador = "";
     private static String mEmail = "";
     private static String mComando = "";
+    public String ip = "172.28.145.152";
+
 
     private TextView mNomeDoadorTextView;
     private TextView mEmailDoador;
@@ -82,7 +84,7 @@ public class AvaliarDoador extends AppCompatActivity {
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/avaliarDoador/" + iddoador,
+                        "http://"+ip+":5000/api/avaliarDoador/" + iddoador,
                         jsonObj2,
                         new Response.Listener<JSONObject>() {
                             @Override

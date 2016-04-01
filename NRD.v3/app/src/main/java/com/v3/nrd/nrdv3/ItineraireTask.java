@@ -174,7 +174,7 @@ public class ItineraireTask extends AsyncTask<Void, Integer, Boolean> {
             //On déclare un marker rouge que l'on mettra sur l'arrivée
             final MarkerOptions markerB = new MarkerOptions();
             markerB.position(lstLatLng.get(lstLatLng.size()-1));
-            markerB.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
+            markerB.icon(BitmapDescriptorFactory.fromResource(R.mipmap.pin_green));
 
 //            GoogleApiClient mGoogleApiClient;
 //            mGoogleApiClient = new GoogleApiClient.Builder(this)

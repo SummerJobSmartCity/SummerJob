@@ -28,6 +28,7 @@ public class ActResultado extends AppCompatActivity {
 
     private Button btnColetaEfetuada;
     private RequestQueue requestQueue;
+    public String ip = "172.28.145.152";
 
     String fbJsonObjToString;
     JSONObject jsonObj;
@@ -69,7 +70,7 @@ public class ActResultado extends AppCompatActivity {
                     }
 
                     final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
-                            "http://172.28.144.181:5000/api/users/" + id,
+                            "http://"+ip+":5000/api/users/" + id,
                             jsonObj,
                             new Response.Listener<JSONObject>() {
                                 @Override
@@ -169,7 +170,7 @@ public class ActResultado extends AppCompatActivity {
         }
 
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                "http://172.28.144.181:5000/api/users/" + id,
+                "http://"+ip+":5000/api/users/" + id,
                 jsonObj,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -240,7 +241,7 @@ public class ActResultado extends AppCompatActivity {
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override

@@ -48,6 +48,8 @@ public class ActDoador extends AppCompatActivity
     private RequestQueue requestQueue;
     public double lat;
     public double lng;
+    public String ip = "172.28.145.152";
+
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
@@ -84,7 +86,7 @@ public class ActDoador extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -152,7 +154,7 @@ public class ActDoador extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest3 = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/postColeta",
+                        "http://"+ip+":5000/api/postColeta",
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -203,7 +205,7 @@ public class ActDoador extends AppCompatActivity
         }
 
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                "http://172.28.144.181:5000/api/users/" + id,
+                "http://"+ip+":5000/api/users/" + id,
                 jsonObj,
                 new Response.Listener<JSONObject>() {
                     @Override

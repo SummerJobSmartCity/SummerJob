@@ -48,6 +48,8 @@ public class MainActivity extends AppCompatActivity
     private Button btnDoador;
     private GoogleApiClient client;
     private RequestQueue requestQueue;
+    public String ip = "172.28.145.152";
+
 
     double lat;
     double lng;
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         }
 
         final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                "http://172.28.144.181:5000/api/users/" + id,
+                "http://"+ip+":5000/api/users/" + id,
                 jsonObj,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -178,7 +180,7 @@ public class MainActivity extends AppCompatActivity
             }
 
             final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                    "http://172.28.144.181:5000/api/users/" + id,
+                    "http://"+ip+":5000/api/users/" + id,
                     jsonObj,
                     new Response.Listener<JSONObject>() {
                         @Override
@@ -273,12 +275,12 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
                             public void onResponse(JSONObject response) {
-//                                Toast.makeText(MainActivity.this, "Atualizando usuario -> coletor", Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, "Atualizando sua localização", Toast.LENGTH_LONG).show();
                             }
                         },
 
@@ -310,7 +312,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override

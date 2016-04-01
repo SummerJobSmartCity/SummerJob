@@ -30,6 +30,9 @@ public class AvaliarColetor extends AppCompatActivity {
     private static String mNomeColetor = "";
     private static String emailColetor = "";
 
+    public String ip = "172.28.145.152";
+
+
     JSONObject jsonObj;
     JSONObject jsonObj2;
     JSONObject jsonObjDados;
@@ -77,7 +80,7 @@ public class AvaliarColetor extends AppCompatActivity {
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/avaliarColetor/" + idcoletor,
+                        "http://"+ip+":5000/api/avaliarColetor/" + idcoletor,
                         jsonObj2,
                         new Response.Listener<JSONObject>() {
                             @Override

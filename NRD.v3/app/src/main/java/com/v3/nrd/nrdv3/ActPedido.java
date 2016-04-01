@@ -65,6 +65,8 @@ public class ActPedido extends AppCompatActivity
     public double lng_coletor;
     public String origem;
     public String destino;                  //informado pelo servidor, posição do doador
+    public String ip = "172.28.145.152";
+
 
     GoogleApiClient mGoogleApiClient;
     GoogleMap mMap;
@@ -98,7 +100,7 @@ public class ActPedido extends AppCompatActivity
                     }
 
                     final JsonObjectRequest jsonObjectRequest2 = new JsonObjectRequest(Request.Method.POST,
-                            "http://172.28.144.181:5000/api/users/" + id,
+                            "http://"+ip+":5000/api/users/" + id,
                             jsonObj,
                             new Response.Listener<JSONObject>() {
                                 @Override
@@ -318,7 +320,7 @@ public class ActPedido extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
@@ -355,7 +357,7 @@ public class ActPedido extends AppCompatActivity
                 }
 
                 final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST,
-                        "http://172.28.144.181:5000/api/users/" + id,
+                        "http://"+ip+":5000/api/users/" + id,
                         jsonObj,
                         new Response.Listener<JSONObject>() {
                             @Override
