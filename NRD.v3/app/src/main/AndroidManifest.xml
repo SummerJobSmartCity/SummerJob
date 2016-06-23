@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.v3.nrd.nrdv3">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <permission android:name="com.v3.nrd.nrdv3.permission.C2D_MESSAGE"
+                android:protectionLevel="signature" />
+    <uses-permission android:name="com.v3.nrd.nrdv3.permission.C2D_MESSAGE" />
+
+    <uses-library android:name="com.google.android.maps" />
+
+    <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH"/>
+
+    <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".MainActivity" />
+        <activity android:name=".ActLogin">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ActDoador" />
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCSeioyF-NUGjL1EtjO3nk74ZE12HIid88" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <activity android:name=".ActPedido" />
+        <!--
+             ATTENTION: This was auto-generated to add Google Play services to your project for
+             App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
+        -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".ActResultado" />
+        <activity android:name=".AvaliarColetor" />
+        <activity android:name=".AvaliarDoador"></activity>
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.v3.nrd.nrdv3" />
+            </intent-filter>
+            <!--A declaration of GcmReceiver, which handles messages sent from GCM
+            to your application. Because this service needs permission to receive messages
+            from GCM, add com.google.android.c2dm.permission.SEND to the receiver.
+            herda de ...., que permite a gente deixar a app trabalhando, que é referende
+             a WAKE LOCK, mas mesmo assim é preciso a permissão do WAKE LOCK para o
+             Receiver continua trabalhando -->
+        </receiver>
+
+
+
+        <service
+            android:name="com.v3.nrd.nrdv3.GCM.MyGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+            <!--A declaration of GcmListenerService, which enables various aspects of handling
+            messages such as detecting different downstream message types, determining upstream send status,
+             and automatically displaying simple notifications on the app’s behalf.-->
+        </service>
+
+        <service
+            android:name="com.v3.nrd.nrdv3.GCM.MyInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+            <!--A service that extends InstanceIDListenerService, to handle the creation,
+            rotation, and updating of registration tokens.-->
+        </service>
+
+        <service
+            android:name="com.v3.nrd.nrdv3.GCM.RegistrationIntentService"
+            android:exported="false" >
+            <!--processar as mensagens que serão recebidas.-->
+        </service>
+        <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+        <activity
+            android:name="com.v3.nrd.nrdv3.Bluetooth.Dados">
+        </activity>
+        <!-->>>>>>>>>>>>>>>>>>>>>>>RUBÃO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!-->
+
+    </application>
+
+</manifest>

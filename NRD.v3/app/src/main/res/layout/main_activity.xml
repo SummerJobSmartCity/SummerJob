@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:weightSum="1"
+    android:orientation="vertical"
+    android:background="@mipmap/bg_select"
+
+
+
+    >
+
+    <Button
+        android:layout_width="270dp"
+        android:layout_height="70dp"
+        android:text="@string/lbl_coletor"
+        android:id="@+id/btnColetor"
+        android:layout_gravity="center_horizontal"
+        android:background="@mipmap/bt_coletar"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:textSize="@dimen/abc_action_bar_content_inset_material"
+        android:layout_marginTop="24dp"
+        android:layout_below="@+id/btnDoador"
+        android:layout_alignLeft="@+id/btnDoador"
+        android:layout_alignStart="@+id/btnDoador" />
+
+    <Button
+        android:layout_width="270dp"
+        android:layout_height="70dp"
+        android:text="@string/lbl_doador"
+        android:id="@+id/btnDoador"
+        android:background="@mipmap/bt_doar"
+        android:textColor="#ffffff"
+        android:textAlignment="center"
+        android:textSize="@dimen/abc_action_bar_content_inset_material"
+        android:layout_marginTop="44dp"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:nestedScrollingEnabled="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="@string/lbl_ou"
+        android:id="@+id/textView2"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="31dp"
+        android:layout_marginStart="31dp"
+        android:textColor="#6b6b6b"
+        android:textSize="@dimen/abc_dialog_padding_material"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView2"
+        android:layout_marginTop="98dp"
+        android:src="@mipmap/logo_common"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/textView2"
+        android:layout_alignEnd="@+id/textView2"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignStart="@+id/textView2" />
+
+</RelativeLayout>
